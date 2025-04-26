@@ -16,7 +16,6 @@ import 'encrypted/env.dart';
 /// );
 /// ```
 class DefaultFirebaseOptions {
-  static Env env = Env.create();
 
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
@@ -56,10 +55,10 @@ class DefaultFirebaseOptions {
   }
 
   static FirebaseOptions android = FirebaseOptions(
-    apiKey: env.firebaseAndroidApiKey,
-    appId: env.firebaseAndroidAppId,
-    messagingSenderId: env.firebaseAndroidMessagingSenderId,
-    projectId: env.firebaseAndroidProjectId,
-    storageBucket: env.firebaseAndroidStorageBucket,
+      apiKey: Env.firebaseApiKey,
+      appId: Env.firebaseAppId,
+      messagingSenderId: Env.firebaseMessagingSenderId,
+      projectId: Env.firebaseProjectId,
+      storageBucket: Env.firebaseStorageBucket,
   );
 }

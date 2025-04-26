@@ -7,8 +7,11 @@
             "type": "dart",
             "flutterMode": "debug",
             "args": [
-                "--dart-define", "ENCRYPTION_KEY=VALUE",
-                "--dart-define", "IV_KEY=VALUE",
+                "--dart-define=FIREBASE_API_KEY=your-real-api-key",
+                "--dart-define=FIREBASE_APP_ID=your-real-app-id",
+                "--dart-define=FIREBASE_MESSAGING_SENDER_ID=your-real-sender-id",
+                "--dart-define=FIREBASE_PROJECT_ID=your-real-project-id",
+                "--dart-define=FIREBASE_STORAGE_BUCKET=your-real-storage-bucket"
             ],
             "console": "debugConsole",
         },
@@ -18,8 +21,11 @@
             "type": "dart",
             "flutterMode": "profile",
             "args": [
-                "--dart-define", "ENCRYPTION_KEY=VALUE",
-                "--dart-define", "IV_KEY=VALUE",
+                "--dart-define=FIREBASE_API_KEY=your-real-api-key",
+                "--dart-define=FIREBASE_APP_ID=your-real-app-id",
+                "--dart-define=FIREBASE_MESSAGING_SENDER_ID=your-real-sender-id",
+                "--dart-define=FIREBASE_PROJECT_ID=your-real-project-id",
+                "--dart-define=FIREBASE_STORAGE_BUCKET=your-real-storage-bucket"
             ],
         },
         {
@@ -28,8 +34,11 @@
             "type": "dart",
             "flutterMode": "release",
             "args": [
-                "--dart-define", "ENCRYPTION_KEY=VALUE",
-                "--dart-define", "IV_KEY=VALUE",
+                "--dart-define=FIREBASE_API_KEY=your-real-api-key",
+                "--dart-define=FIREBASE_APP_ID=your-real-app-id",
+                "--dart-define=FIREBASE_MESSAGING_SENDER_ID=your-real-sender-id",
+                "--dart-define=FIREBASE_PROJECT_ID=your-real-project-id",
+                "--dart-define=FIREBASE_STORAGE_BUCKET=your-real-storage-bucket"
             ],
         }
     ]
