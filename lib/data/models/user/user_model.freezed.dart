@@ -20,6 +20,8 @@ mixin _$UserModel {
   String get email;
   @JsonKey(name: 'total_points')
   int get totalPoints;
+  @JsonKey(name: 'redeemed_rewards')
+  List<String> get redeemedRewards;
 
   /// Create a copy of UserModel
   /// with the given fields replaced by the non-null parameter values.
@@ -40,16 +42,19 @@ mixin _$UserModel {
             (identical(other.name, name) || other.name == name) &&
             (identical(other.email, email) || other.email == email) &&
             (identical(other.totalPoints, totalPoints) ||
-                other.totalPoints == totalPoints));
+                other.totalPoints == totalPoints) &&
+            const DeepCollectionEquality()
+                .equals(other.redeemedRewards, redeemedRewards));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, name, email, totalPoints);
+  int get hashCode => Object.hash(runtimeType, id, name, email, totalPoints,
+      const DeepCollectionEquality().hash(redeemedRewards));
 
   @override
   String toString() {
-    return 'UserModel(id: $id, name: $name, email: $email, totalPoints: $totalPoints)';
+    return 'UserModel(id: $id, name: $name, email: $email, totalPoints: $totalPoints, redeemedRewards: $redeemedRewards)';
   }
 }
 
@@ -62,7 +67,8 @@ abstract mixin class $UserModelCopyWith<$Res> {
       {String id,
       String name,
       String email,
-      @JsonKey(name: 'total_points') int totalPoints});
+      @JsonKey(name: 'total_points') int totalPoints,
+      @JsonKey(name: 'redeemed_rewards') List<String> redeemedRewards});
 }
 
 /// @nodoc
@@ -81,6 +87,7 @@ class _$UserModelCopyWithImpl<$Res> implements $UserModelCopyWith<$Res> {
     Object? name = null,
     Object? email = null,
     Object? totalPoints = null,
+    Object? redeemedRewards = null,
   }) {
     return _then(_self.copyWith(
       id: null == id
@@ -99,6 +106,10 @@ class _$UserModelCopyWithImpl<$Res> implements $UserModelCopyWith<$Res> {
           ? _self.totalPoints
           : totalPoints // ignore: cast_nullable_to_non_nullable
               as int,
+      redeemedRewards: null == redeemedRewards
+          ? _self.redeemedRewards
+          : redeemedRewards // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
@@ -110,7 +121,10 @@ class _UserModel implements UserModel {
       {required this.id,
       required this.name,
       required this.email,
-      @JsonKey(name: 'total_points') required this.totalPoints});
+      @JsonKey(name: 'total_points') required this.totalPoints,
+      @JsonKey(name: 'redeemed_rewards')
+      required final List<String> redeemedRewards})
+      : _redeemedRewards = redeemedRewards;
   factory _UserModel.fromJson(Map<String, dynamic> json) =>
       _$UserModelFromJson(json);
 
@@ -123,6 +137,14 @@ class _UserModel implements UserModel {
   @override
   @JsonKey(name: 'total_points')
   final int totalPoints;
+  final List<String> _redeemedRewards;
+  @override
+  @JsonKey(name: 'redeemed_rewards')
+  List<String> get redeemedRewards {
+    if (_redeemedRewards is EqualUnmodifiableListView) return _redeemedRewards;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_redeemedRewards);
+  }
 
   /// Create a copy of UserModel
   /// with the given fields replaced by the non-null parameter values.
@@ -148,16 +170,19 @@ class _UserModel implements UserModel {
             (identical(other.name, name) || other.name == name) &&
             (identical(other.email, email) || other.email == email) &&
             (identical(other.totalPoints, totalPoints) ||
-                other.totalPoints == totalPoints));
+                other.totalPoints == totalPoints) &&
+            const DeepCollectionEquality()
+                .equals(other._redeemedRewards, _redeemedRewards));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, name, email, totalPoints);
+  int get hashCode => Object.hash(runtimeType, id, name, email, totalPoints,
+      const DeepCollectionEquality().hash(_redeemedRewards));
 
   @override
   String toString() {
-    return 'UserModel(id: $id, name: $name, email: $email, totalPoints: $totalPoints)';
+    return 'UserModel(id: $id, name: $name, email: $email, totalPoints: $totalPoints, redeemedRewards: $redeemedRewards)';
   }
 }
 
@@ -173,7 +198,8 @@ abstract mixin class _$UserModelCopyWith<$Res>
       {String id,
       String name,
       String email,
-      @JsonKey(name: 'total_points') int totalPoints});
+      @JsonKey(name: 'total_points') int totalPoints,
+      @JsonKey(name: 'redeemed_rewards') List<String> redeemedRewards});
 }
 
 /// @nodoc
@@ -192,6 +218,7 @@ class __$UserModelCopyWithImpl<$Res> implements _$UserModelCopyWith<$Res> {
     Object? name = null,
     Object? email = null,
     Object? totalPoints = null,
+    Object? redeemedRewards = null,
   }) {
     return _then(_UserModel(
       id: null == id
@@ -210,6 +237,10 @@ class __$UserModelCopyWithImpl<$Res> implements _$UserModelCopyWith<$Res> {
           ? _self.totalPoints
           : totalPoints // ignore: cast_nullable_to_non_nullable
               as int,
+      redeemedRewards: null == redeemedRewards
+          ? _self._redeemedRewards
+          : redeemedRewards // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
