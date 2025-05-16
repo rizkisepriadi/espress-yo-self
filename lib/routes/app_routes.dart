@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../presentation/auth/view/login_screen.dart';
+import '../presentation/auth/view/auth_screen.dart';
 import '../presentation/home/view/home_screen.dart';
 import 'error_page.dart';
 
@@ -32,7 +32,7 @@ final routerProvider = Provider<GoRouter>((ref) {
     routes: [
       GoRoute(
         path: '/login',
-        builder: (context, state) => LoginScreen(),
+        builder: (context, state) => AuthScreen(),
       ),
       GoRoute(
         path: '/home',
