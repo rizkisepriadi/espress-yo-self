@@ -21,6 +21,7 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _retypePasswordController.dispose();
     super.dispose();
   }
 
