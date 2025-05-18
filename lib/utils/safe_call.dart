@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:developer' as developer;
 
-import 'AppException.dart';
+import 'app_exception.dart';
 
 
 Future<T> safeCall<T>(Future<T> Function() block, {String label = ''}) async {
