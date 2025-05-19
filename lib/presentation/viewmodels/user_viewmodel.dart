@@ -4,16 +4,28 @@ import 'package:espress_yo_self/domain/usecases/get_user_usecase.dart';
 
 class UserViewModel extends StateNotifier<AsyncValue<UserEntity>> {
   final GetUserUsecase getUserUsecase;
+  final UpdateUserPointsUsecase updateUserPointsUsecase;
+  final RedeemRewardUsecase redeemRewardUsecase;
+  final UpdateStampProgressUsecase updateStampProgressUsecase;
+  final UpdateUserProfileUsecase updateUserProfileUsecase;
 
-  UserViewModel({required this.getUserUsecase}) : super(const AsyncValue.loading()) {
+  UserViewModel({
+    required this.getUserUsecase,
+    required this.updateUserPointsUsecase,
+    required this.redeemRewardUsecase,
+    required this.updateStampProgressUsecase,
+    required this.updateUserProfileUsecase,
+  }) : super(const AsyncValue.loading()) {
     fetchUser();
   }
 
   Future<void> fetchUser() async {
     try {
       final user = await getUserUsecase.call();
+      if (!mounted) return;
       state = AsyncValue.data(user);
     } catch (e, stack) {
+      if (!mounted) return;
       state = AsyncValue.error(e, stack);
     }
   }
@@ -21,7 +33,8 @@ class UserViewModel extends StateNotifier<AsyncValue<UserEntity>> {
   Future<void> updateUserPoints(String userId, int points) async {
     state = const AsyncValue.loading();
     try {
-      await getUserUsecase.repository.updateUserPoints(userId, points);
+      await updateUserPointsUsecase.call(userId, points);
+      await fetchUser();
     } catch (e, stack) {
       state = AsyncValue.error(e, stack);
     }
@@ -30,7 +43,8 @@ class UserViewModel extends StateNotifier<AsyncValue<UserEntity>> {
   Future<void> redeemReward(String userId, String rewardId) async {
     state = const AsyncValue.loading();
     try {
-      await getUserUsecase.repository.redeemReward(userId, rewardId);
+      await redeemRewardUsecase.call(userId, rewardId);
+      await fetchUser();
     } catch (e, stack) {
       state = AsyncValue.error(e, stack);
     }
@@ -39,17 +53,35 @@ class UserViewModel extends StateNotifier<AsyncValue<UserEntity>> {
   Future<void> updateStampProgress(String userId, int stamps) async {
     state = const AsyncValue.loading();
     try {
-      await getUserUsecase.repository.updateStampProgress(userId, stamps);
+      await updateStampProgressUsecase.call(userId, stamps);
+      await fetchUser();
     } catch (e, stack) {
       state = AsyncValue.error(e, stack);
     }
   }
 
-  Future<void> updateUserProfile(String userId, String name) async {
+  Future<void> updateUserProfile(String userId, String displayName) async {
+    if (!mounted) return;
+
     state = const AsyncValue.loading();
     try {
-      await getUserUsecase.repository.updateUserProfile(userId, name);
+      await updateUserProfileUsecase.call(userId, displayName);
+
+      if (!mounted) return;
+
+      // Only try to fetch user if the profile update was successful
+      try {
+        await fetchUser();
+        print("User profile updated in Firestore");
+      } catch (e) {
+        print("Profile updated but couldn't fetch updated user: $e");
+        // Still consider this a success since the profile was updated
+      }
     } catch (e, stack) {
+      print("Error updating user profile: $e");
+
+      if (!mounted) return;
+
       state = AsyncValue.error(e, stack);
     }
   }
