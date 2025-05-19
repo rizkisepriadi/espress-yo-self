@@ -39,6 +39,20 @@ class AuthService {
     return await _auth.signInWithCredential(credential);
   }
 
+  Future<User> updateUserProfile(String displayName, String? photoURL) async {
+    final user = _auth.currentUser;
+    if (user == null) {
+      throw Exception('No user is currently signed in');
+    }
+
+    await user.updateDisplayName(displayName);
+    if (photoURL != null) {
+      await user.updatePhotoURL(photoURL);
+    }
+    await user.reload();
+    return _auth.currentUser!;
+  }
+
   Future<void> signOut() async {
     await _auth.signOut();
     await _googleSignIn.signOut();
