@@ -3,107 +3,92 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class TypographyApp {
-  static TextStyle displayLarge = TextStyle(
-    fontFamily: GoogleFonts.roboto().fontFamily,
-    fontSize: ScreenUtil().setSp(57),
+  static TextStyle displayLarge = GoogleFonts.roboto(
+    fontSize: 57.sp,
     fontWeight: FontWeight.w400,
     letterSpacing: -0.25,
   );
 
-  static TextStyle displayMedium = TextStyle(
-    fontFamily: GoogleFonts.roboto().fontFamily,
-    fontSize: ScreenUtil().setSp(45),
+  static TextStyle displayMedium = GoogleFonts.roboto(
+    fontSize: 45.sp,
     fontWeight: FontWeight.w400,
     letterSpacing: 0,
   );
 
-  static TextStyle displaySmall = TextStyle(
-    fontFamily: GoogleFonts.roboto().fontFamily,
-    fontSize: ScreenUtil().setSp(36),
+  static TextStyle displaySmall = GoogleFonts.roboto(
+    fontSize: 36.sp,
     fontWeight: FontWeight.w400,
     letterSpacing: 0,
   );
 
-  static TextStyle headlineLarge = TextStyle(
-    fontFamily: GoogleFonts.roboto().fontFamily,
-    fontSize: ScreenUtil().setSp(32),
+  static TextStyle headlineLarge = GoogleFonts.roboto(
+    fontSize: 32.sp,
     fontWeight: FontWeight.w400,
     letterSpacing: 0,
   );
 
-  static TextStyle headlineMedium = TextStyle(
-    fontFamily: GoogleFonts.roboto().fontFamily,
-    fontSize: ScreenUtil().setSp(28),
+  static TextStyle headlineMedium = GoogleFonts.roboto(
+    fontSize: 28.sp,
     fontWeight: FontWeight.w400,
     letterSpacing: 0,
   );
 
-  static TextStyle headlineSmall = TextStyle(
-    fontFamily: GoogleFonts.roboto().fontFamily,
-    fontSize: ScreenUtil().setSp(24),
+  static TextStyle headlineSmall = GoogleFonts.roboto(
+    fontSize: 24.sp,
     fontWeight: FontWeight.w400,
     letterSpacing: 0,
   );
 
-  static TextStyle titleLarge = TextStyle(
-    fontFamily: GoogleFonts.roboto().fontFamily,
-    fontSize: ScreenUtil().setSp(22),
+  static TextStyle titleLarge = GoogleFonts.roboto(
+    fontSize: 22.sp,
     fontWeight: FontWeight.w400,
     letterSpacing: 0,
   );
 
-  static TextStyle titleMedium = TextStyle(
-    fontFamily: GoogleFonts.roboto().fontFamily,
-    fontSize: ScreenUtil().setSp(16),
+  static TextStyle titleMedium = GoogleFonts.roboto(
+    fontSize: 16.sp,
     fontWeight: FontWeight.w500,
     letterSpacing: 0.15,
   );
 
-  static TextStyle titleSmall = TextStyle(
-    fontFamily: GoogleFonts.roboto().fontFamily,
-    fontSize: ScreenUtil().setSp(14),
+  static TextStyle titleSmall = GoogleFonts.roboto(
+    fontSize: 14.sp,
     fontWeight: FontWeight.w500,
     letterSpacing: 0.1,
   );
 
-  static TextStyle bodyLarge = TextStyle(
-    fontFamily: GoogleFonts.roboto().fontFamily,
-    fontSize: ScreenUtil().setSp(16),
+  static TextStyle bodyLarge = GoogleFonts.roboto(
+    fontSize: 16.sp,
     fontWeight: FontWeight.w400,
     letterSpacing: 0.5,
   );
 
-  static TextStyle bodyMedium = TextStyle(
-    fontFamily: GoogleFonts.roboto().fontFamily,
-    fontSize: ScreenUtil().setSp(14),
+  static TextStyle bodyMedium = GoogleFonts.roboto(
+    fontSize: 14.sp,
     fontWeight: FontWeight.w400,
     letterSpacing: 0.25,
   );
 
-  static TextStyle bodySmall = TextStyle(
-    fontFamily: GoogleFonts.roboto().fontFamily,
-    fontSize: ScreenUtil().setSp(12),
+  static TextStyle bodySmall = GoogleFonts.roboto(
+    fontSize: 12.sp,
     fontWeight: FontWeight.w400,
     letterSpacing: 0.4,
   );
 
-  static TextStyle labelLarge = TextStyle(
-    fontFamily: GoogleFonts.roboto().fontFamily,
-    fontSize: ScreenUtil().setSp(14),
+  static TextStyle labelLarge = GoogleFonts.roboto(
+    fontSize: 14.sp,
     fontWeight: FontWeight.w500,
     letterSpacing: 0.1,
   );
 
-  static TextStyle labelMedium = TextStyle(
-    fontFamily: GoogleFonts.roboto().fontFamily,
-    fontSize: ScreenUtil().setSp(12),
+  static TextStyle labelMedium = GoogleFonts.roboto(
+    fontSize: 12.sp,
     fontWeight: FontWeight.w500,
     letterSpacing: 0.5,
   );
 
-  static TextStyle labelSmall = TextStyle(
-    fontFamily: GoogleFonts.roboto().fontFamily,
-    fontSize: ScreenUtil().setSp(11),
+  static TextStyle labelSmall = GoogleFonts.roboto(
+    fontSize: 11.sp,
     fontWeight: FontWeight.w500,
     letterSpacing: 0.5,
   );
