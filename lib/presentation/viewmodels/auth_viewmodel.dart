@@ -47,6 +47,15 @@ class AuthViewModel extends StateNotifier<AsyncValue<User?>> {
     }
   }
 
+  Future<void> updateUserProfile(String displayName, String? photoURL) async {
+    state = const AsyncLoading();
+    try {
+      await authService.updateUserProfile(displayName, photoURL);
+    } catch (e, stack) {
+      state = AsyncError(e, stack);
+    }
+  }
+
   Future<void> signOut() async {
     state = const AsyncLoading();
     try {
@@ -54,5 +63,9 @@ class AuthViewModel extends StateNotifier<AsyncValue<User?>> {
     } catch (e, stack) {
       state = AsyncError(e, stack);
     }
+  }
+
+  void refreshUser(User user) {
+    state = AsyncData(user);
   }
 }
