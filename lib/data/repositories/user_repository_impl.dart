@@ -70,11 +70,23 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<void> updateUserProfile(
-      String userId, String name, String email) async {
-    return await safeCall(() async {
-      final userDoc = firestore.collection('users').doc(userId);
-      await userDoc.update({'name': name, 'email': email});
+  Future<void> updateUserProfile(String userId, String name) async {
+    return safeCall(() async {
+      final userDocRef = firestore.collection('users').doc(userId);
+
+      final docSnapshot = await userDocRef.get();
+
+      if (!docSnapshot.exists) {
+        await userDocRef.set({
+          'id': userId,
+          'name': name,
+          'email': authService.currentUser?.email ?? '',
+          'total_points': 0,
+          'redeemed_rewards': []
+        });
+      } else {
+        await userDocRef.update({'name': name});
+      }
     }, label: 'updateUserProfile');
   }
 }
