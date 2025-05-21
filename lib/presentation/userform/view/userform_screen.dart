@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:espress_yo_self/di/di.dart';
 import 'package:espress_yo_self/presentation/common/long_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,8 +8,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../home/view/home_screen.dart';
-
 class UserformScreen extends ConsumerStatefulWidget {
   const UserformScreen({super.key});
 
@@ -20,10 +17,16 @@ class UserformScreen extends ConsumerStatefulWidget {
 
 class NameformScreenState extends ConsumerState<UserformScreen> {
   final _nameController = TextEditingController();
+  final userId = FirebaseAuth.instance.currentUser?.uid;
   bool _isLoading = false;
+
+  // Add a cancellation token
+  bool _cancelled = false;
 
   @override
   void dispose() {
+    // Mark as cancelled when disposed
+    _cancelled = true;
     _nameController.dispose();
     super.dispose();
   }
@@ -40,94 +43,51 @@ class NameformScreenState extends ConsumerState<UserformScreen> {
     }
 
     try {
-      // Show loading indicator using a stateful approach instead of dialog
-      setState(() {
-        _isLoading = true;
-      });
-
-      // Get UID first
-      final uid = FirebaseAuth.instance.currentUser?.uid;
-      if (uid == null) {
-        debugPrint("User not logged in");
+      // Show loading indicator
+      if (!_cancelled && mounted) {
         setState(() {
-          _isLoading = false;
+          _isLoading = true;
         });
-        return;
       }
 
-      // Update Firestore directly
-      try {
-        await FirebaseFirestore.instance.collection('users').doc(uid).set({
-          'id': uid,
-          'name': name,
-          'email': FirebaseAuth.instance.currentUser?.email ?? '',
-          'total_points': 0,
-          'redeemed_rewards': []
-        }, SetOptions(merge: true));
-        debugPrint("Firestore updated directly.");
-      } catch (e) {
-        debugPrint("Firestore error: $e");
-        setState(() {
-          _isLoading = false;
-        });
-        return;
-      }
+      // First update Firestore through UserViewModel
+      await ref
+          .read(getUserViewModelProvider.notifier)
+          .updateUserProfile(userId!, name);
+      debugPrint("User profile updated through proper architecture");
 
-      // Update Firebase Auth directly
-      try {
-        await FirebaseAuth.instance.currentUser?.updateDisplayName(name);
-        debugPrint("Firebase Auth updated directly.");
+      // Check cancellation
+      if (_cancelled) return;
 
-        // IMPORTANT: Also update your local auth state
-        final user = FirebaseAuth.instance.currentUser;
-        if (user != null) {
-          // Force refresh the AuthViewModel state
-          ref.read(authViewModelProvider.notifier).refreshUser(user);
-        }
-      } catch (e) {
-        debugPrint("Firebase Auth error: $e");
-        setState(() {
-          _isLoading = false;
-        });
-        return;
-      }
+      // Then update Firebase Auth
+      await ref
+          .read(authViewModelProvider.notifier)
+          .updateUserProfile(name, null);
+      debugPrint("Auth profile updated through proper architecture");
 
-      // Wait for a moment to let changes propagate
+      // Force refresh of auth state to ensure router sees the correct state
+      ref.refresh(authViewModelProvider);
+
+      // IMPORTANT: Use a longer delay to ensure state propagation
       await Future.delayed(const Duration(seconds: 2));
 
-      // Hide loading indicator
-      setState(() {
-        _isLoading = false;
-      });
+      // Check cancellation before continuing
+      if (_cancelled) return;
 
-      // Use GoRouter to navigate
-      if (context.mounted) {
-        context.go('/home');
+      // Navigate with special parameter to bypass redirect
+      if (mounted && context.mounted) {
+        context.go('/home?fromProfile=true');
       }
     } catch (e) {
-      debugPrint("Error: $e");
-      
-      // Try-catch the setState to prevent crashes if widget is unmounted
-      try {
-        if (mounted) {
-          setState(() {
-            _isLoading = false;
-          });
-        }
-      } catch (setStateError) {
-        debugPrint("setState error: $setStateError");
-      }
-      
-      // Try-catch the SnackBar to prevent crashes if context is invalid
-      try {
-        // Only show SnackBar if we're still mounted AND context is valid
-        if (mounted && context != null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("An error occurred: $e")),
-          );
-        }
-      } catch (snackBarError) {
-        debugPrint("SnackBar error: $snackBarError");
+      // Only try to update state if not cancelled
+      if (!_cancelled && mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("An error occurred: $e")),
+        );
       }
     }
   }
@@ -190,6 +150,10 @@ class NameformScreenState extends ConsumerState<UserformScreen> {
                                 bottom: 30.h),
                             child: TextField(
                               maxLines: 1,
+                              style: textTheme.titleLarge?.copyWith(
+                                fontWeight: FontWeight.w700,
+                                color: colorScheme.onPrimaryContainer,
+                              ),
                               maxLength: 20,
                               controller: _nameController,
                               textAlign: TextAlign.center,
