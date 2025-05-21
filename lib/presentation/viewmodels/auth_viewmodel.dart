@@ -50,7 +50,11 @@ class AuthViewModel extends StateNotifier<AsyncValue<User?>> {
   Future<void> updateUserProfile(String displayName, String? photoURL) async {
     state = const AsyncLoading();
     try {
-      await authService.updateUserProfile(displayName, photoURL);
+      // Update Firebase Auth
+      final updatedUser = await authService.updateUserProfile(displayName, photoURL);
+      
+      // CRITICAL CHANGE: Force an immediate state update without waiting for stream
+      state = AsyncData(updatedUser);
     } catch (e, stack) {
       state = AsyncError(e, stack);
     }
