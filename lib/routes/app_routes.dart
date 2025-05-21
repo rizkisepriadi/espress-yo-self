@@ -16,40 +16,43 @@ final routerProvider = Provider<GoRouter>((ref) {
     initialLocation: '/login',
     routerNeglect: true,
     redirect: (context, state) {
-      // Get current state from ref
-      final authState = ref.read(authViewModelProvider);
+      // Get current user from state
       final user = authState.asData?.value;
       final isLoggedIn = user != null;
       final isLoggingIn = state.matchedLocation == '/login';
       final isUpdatingProfile = state.matchedLocation == '/userform';
       
-      // For debugging
-      print("ROUTER: Logged in: $isLoggedIn, Current route: ${state.matchedLocation}");
-      if (user != null) {
-        print("ROUTER: User displayName: ${user.displayName}");
-      }
+      // Check for parameter that bypasses profile check
+      final fromProfile = state.uri.queryParameters['fromProfile'] == 'true';
       
-      // Don't redirect during profile update process
-      if (isUpdatingProfile) {
+      // Special case: coming from profile update - don't redirect
+      if (isLoggedIn && fromProfile && state.matchedLocation == '/home') {
+        debugPrint("ROUTER: Bypassing redirect because coming from profile update");
         return null;
       }
       
-      // If not logged in and not on login screen, go to login
-      if (!isLoggedIn && !isLoggingIn) {
+      // For debugging
+      debugPrint("ROUTER: Logged in: $isLoggedIn, Current route: ${state.matchedLocation}");
+      if (user != null) {
+        debugPrint("ROUTER: User displayName: ${user.displayName}");
+      }
+      
+      // Not logged in - go to login
+      if (!isLoggedIn) {
         return '/login';
       }
       
-      // If logged in but needs to fill out profile, go to userform
-      if (isLoggedIn && user.displayName == null && !isUpdatingProfile) {
+      // Logged in but no display name - go to userform
+      if (user!.displayName == null && !isUpdatingProfile) {
         return '/userform';
       }
       
-      // If logged in and on login screen, go to home
-      if (isLoggedIn && isLoggingIn) {
+      // Logged in with display name, but on login screen - go to home
+      if (isLoggedIn && user.displayName != null && isLoggingIn) {
         return '/home';
       }
       
-      // Don't redirect otherwise
+      // Don't redirect
       return null;
     },
     routes: [
