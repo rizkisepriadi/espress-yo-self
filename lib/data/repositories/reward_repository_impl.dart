@@ -1,50 +1,47 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:espress_yo_self/data/models/user_redemption/user_redemption_model.dart';
 import 'package:espress_yo_self/domain/entities/reward_entity.dart';
+import 'package:espress_yo_self/domain/entities/user_redemption_entity.dart';
 import 'package:espress_yo_self/domain/repositories/reward_repository.dart';
 import 'package:espress_yo_self/utils/safe_call.dart';
+
+import '../models/reward/reward_model.dart';
 
 class RewardRepositoryImpl implements RewardRepository {
   final CollectionReference _rewardsCollection =
       FirebaseFirestore.instance.collection('rewards');
-
-  @override
-  Future<void> redeemReward(
-      String userId, String rewardId, int pointsRequired) async {
-    return await safeCall(() async {
-      final userDoc =
-          FirebaseFirestore.instance.collection('users').doc(userId);
-      final rewardDoc = _rewardsCollection.doc(rewardId);
-
-      final userSnapshot = await userDoc.get();
-      final currentPoints = userSnapshot['total_points'] ?? 0;
-      if (currentPoints < pointsRequired) {
-        throw Exception('Not enough points');
-      }
-
-      await userDoc.update({
-        'total_points': FieldValue.increment(-pointsRequired),
-        'redeemed_rewards': FieldValue.arrayUnion([rewardId])
-      });
-
-      await rewardDoc.update({'is_claimed': true});
-    }, label: 'redeemReward');
-  }
+  final CollectionReference _redemptionsCollection =
+      FirebaseFirestore.instance.collection('user_redemptions');
 
   @override
   Future<List<RewardEntity>> getAllRewards() async {
     return await safeCall(() async {
       final querySnapshot = await _rewardsCollection.get();
       return querySnapshot.docs.map((doc) {
-        final data = doc.data() as Map<String, dynamic>;
-        return RewardEntity(
-          id: doc.id,
-          name: data['name'],
-          description: data['description'],
-          pointsRequired: data['points_required'],
-          isClaimed: data['is_claimed'],
-        );
+        final model = RewardModel.fromJson({
+          'id': doc.id,
+          ...doc.data() as Map<String, dynamic>,
+        });
+        return model.toEntity();
       }).toList();
     }, label: 'getAllRewards');
+  }
+
+  @override
+  Future<List<RewardEntity>> getActiveRewards() async {
+    return await safeCall(() async {
+      final querySnapshot = await _rewardsCollection
+          .where('is_active', isEqualTo: true)
+          .get();
+      return querySnapshot.docs.map((doc) {
+        // Gunakan RewardModel untuk konsistensi (seperti getAllRewards)
+        final model = RewardModel.fromJson({
+          'id': doc.id,
+          ...doc.data() as Map<String, dynamic>,
+        });
+        return model.toEntity();
+      }).toList();
+    }, label: 'getActiveRewards');
   }
 
   @override
@@ -53,14 +50,110 @@ class RewardRepositoryImpl implements RewardRepository {
       final doc = await _rewardsCollection.doc(rewardId).get();
       if (!doc.exists) return null;
 
-      final data = doc.data()! as Map<String, dynamic>;
-      return RewardEntity(
-        id: rewardId,
-        name: data['name'],
-        description: data['description'],
-        pointsRequired: data['points_required'],
-        isClaimed: data['is_claimed'],
-      );
+      final model = RewardModel.fromJson({
+        'id': doc.id,
+        ...doc.data()! as Map<String, dynamic>,
+      });
+      return model.toEntity();
     }, label: 'getRewardById');
+  }
+
+  @override
+  Future<void> redeemReward(String userId, String rewardId, int pointsRequired) async {
+    return await safeCall(() async {
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        // Get user document
+        final userDoc = FirebaseFirestore.instance.collection('users').doc(userId);
+        final userSnapshot = await transaction.get(userDoc);
+        
+        if (!userSnapshot.exists) {
+          throw Exception('User not found');
+        }
+
+        final currentPoints = userSnapshot.data()?['total_points'] ?? 0;
+        if (currentPoints < pointsRequired) {
+          throw Exception('Not enough points');
+        }
+
+        // Get reward details
+        final rewardDoc = await transaction.get(_rewardsCollection.doc(rewardId));
+        if (!rewardDoc.exists) {
+          throw Exception('Reward not found');
+        }
+
+        final rewardData = rewardDoc.data() as Map<String, dynamic>;
+        if (!(rewardData['is_active'] ?? true)) {
+          throw Exception('Reward is no longer active');
+        }
+
+        // Update user points AND add to redeemedRewards for quick lookup
+        final currentRedeemedRewards = List<String>.from(userSnapshot.data()?['redeemed_rewards'] ?? []);
+        currentRedeemedRewards.add(rewardId);
+        
+        transaction.update(userDoc, {
+          'total_points': FieldValue.increment(-pointsRequired),
+          'redeemed_rewards': currentRedeemedRewards, // Update quick lookup
+        });
+
+        // Create redemption using model
+        final redemptionId = DateTime.now().millisecondsSinceEpoch.toString();
+        final redemptionModel = UserRedemptionModel(
+          id: redemptionId,
+          userId: userId,
+          rewardId: rewardId,
+          rewardName: rewardData['name'],
+          pointsUsed: pointsRequired,
+          redeemedAt: DateTime.now(),
+          isUsed: false,
+          qrCode: 'QR_${redemptionId}',
+        );
+
+        transaction.set(
+          _redemptionsCollection.doc(redemptionId), 
+          redemptionModel.toJson(),
+        );
+      });
+    }, label: 'redeemReward');
+  }
+
+  @override
+  Future<List<UserRedemptionEntity>> getUserRedemptions(String userId) async {
+    return await safeCall(() async {
+      final querySnapshot = await _redemptionsCollection
+          .where('user_id', isEqualTo: userId)
+          .orderBy('redeemed_at', descending: true)
+          .get();
+
+      return querySnapshot.docs.map((doc) {
+        final model = UserRedemptionModel.fromJson(doc.data() as Map<String, dynamic>);
+        return model.toEntity();
+      }).toList();
+    }, label: 'getUserRedemptions');
+  }
+
+  // Method untuk update redemption status (saat QR di-scan)
+  Future<void> markRedemptionAsUsed(String redemptionId, String staffId) async {
+    return await safeCall(() async {
+      await _redemptionsCollection.doc(redemptionId).update({
+        'is_used': true,
+        'used_at': FieldValue.serverTimestamp(),
+        'used_by_staff': staffId,
+      });
+    }, label: 'markRedemptionAsUsed');
+  }
+  
+  @override
+  Future<bool> hasUserRedeemedReward(String userId, String rewardId) async {
+    return await safeCall(() async {
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .get();
+      
+      if (!userDoc.exists) return false;
+      
+      final redeemedRewards = List<String>.from(userDoc.data()?['redeemed_rewards'] ?? []);
+      return redeemedRewards.contains(rewardId);
+    }, label: 'hasUserRedeemedReward');
   }
 }
