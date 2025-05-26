@@ -33,22 +33,4 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
       return model.toEntity();
     }, label: 'getTransactions');
   }
-
-  @override
-  Future<void> redeemReward(String userId, String rewardId) {
-    return safeCall(() async {
-      await _firestore.collection('users').doc(userId).update({
-        'reward_redeemed': FieldValue.arrayUnion([rewardId])
-      });
-    }, label: 'redeemReward');
-  }
-
-  @override
-  Future<void> updateUserPoints(String userId, int points) {
-    return safeCall(() async {
-      await _firestore.collection('users').doc(userId).update({
-        'points': points,
-      });
-    }, label: 'updateUserPoints');
-  }
 }
