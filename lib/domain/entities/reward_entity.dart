@@ -3,13 +3,17 @@ class RewardEntity {
   final String name;
   final String description;
   final int pointsRequired;
-  final bool isClaimed;
+  final bool isActive;
+  final String? imageUrl;
+  final DateTime? expiryDate;
 
   const RewardEntity({
     required this.id,
     required this.name,
     required this.description,
     required this.pointsRequired,
-    required this.isClaimed,
+    this.isActive = true,
+    this.imageUrl,
+    this.expiryDate,
   });
 }

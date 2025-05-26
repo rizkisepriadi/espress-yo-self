@@ -20,8 +20,12 @@ mixin _$RewardModel {
   String get description;
   @JsonKey(name: 'points_required')
   int get pointsRequired;
-  @JsonKey(name: 'is_claimed')
-  bool get isClaimed;
+  @JsonKey(name: 'is_active')
+  bool get isActive;
+  @JsonKey(name: 'image_url')
+  String? get imageUrl;
+  @JsonKey(name: 'expiry_date')
+  DateTime? get expiryDate;
 
   /// Create a copy of RewardModel
   /// with the given fields replaced by the non-null parameter values.
@@ -44,18 +48,22 @@ mixin _$RewardModel {
                 other.description == description) &&
             (identical(other.pointsRequired, pointsRequired) ||
                 other.pointsRequired == pointsRequired) &&
-            (identical(other.isClaimed, isClaimed) ||
-                other.isClaimed == isClaimed));
+            (identical(other.isActive, isActive) ||
+                other.isActive == isActive) &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl) &&
+            (identical(other.expiryDate, expiryDate) ||
+                other.expiryDate == expiryDate));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, name, description, pointsRequired, isClaimed);
+  int get hashCode => Object.hash(runtimeType, id, name, description,
+      pointsRequired, isActive, imageUrl, expiryDate);
 
   @override
   String toString() {
-    return 'RewardModel(id: $id, name: $name, description: $description, pointsRequired: $pointsRequired, isClaimed: $isClaimed)';
+    return 'RewardModel(id: $id, name: $name, description: $description, pointsRequired: $pointsRequired, isActive: $isActive, imageUrl: $imageUrl, expiryDate: $expiryDate)';
   }
 }
 
@@ -70,7 +78,9 @@ abstract mixin class $RewardModelCopyWith<$Res> {
       String name,
       String description,
       @JsonKey(name: 'points_required') int pointsRequired,
-      @JsonKey(name: 'is_claimed') bool isClaimed});
+      @JsonKey(name: 'is_active') bool isActive,
+      @JsonKey(name: 'image_url') String? imageUrl,
+      @JsonKey(name: 'expiry_date') DateTime? expiryDate});
 }
 
 /// @nodoc
@@ -89,7 +99,9 @@ class _$RewardModelCopyWithImpl<$Res> implements $RewardModelCopyWith<$Res> {
     Object? name = null,
     Object? description = null,
     Object? pointsRequired = null,
-    Object? isClaimed = null,
+    Object? isActive = null,
+    Object? imageUrl = freezed,
+    Object? expiryDate = freezed,
   }) {
     return _then(_self.copyWith(
       id: null == id
@@ -108,10 +120,18 @@ class _$RewardModelCopyWithImpl<$Res> implements $RewardModelCopyWith<$Res> {
           ? _self.pointsRequired
           : pointsRequired // ignore: cast_nullable_to_non_nullable
               as int,
-      isClaimed: null == isClaimed
-          ? _self.isClaimed
-          : isClaimed // ignore: cast_nullable_to_non_nullable
+      isActive: null == isActive
+          ? _self.isActive
+          : isActive // ignore: cast_nullable_to_non_nullable
               as bool,
+      imageUrl: freezed == imageUrl
+          ? _self.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      expiryDate: freezed == expiryDate
+          ? _self.expiryDate
+          : expiryDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ));
   }
 }
@@ -124,7 +144,9 @@ class _RewardModel implements RewardModel {
       required this.name,
       required this.description,
       @JsonKey(name: 'points_required') required this.pointsRequired,
-      @JsonKey(name: 'is_claimed') required this.isClaimed});
+      @JsonKey(name: 'is_active') this.isActive = true,
+      @JsonKey(name: 'image_url') this.imageUrl,
+      @JsonKey(name: 'expiry_date') this.expiryDate});
   factory _RewardModel.fromJson(Map<String, dynamic> json) =>
       _$RewardModelFromJson(json);
 
@@ -138,8 +160,14 @@ class _RewardModel implements RewardModel {
   @JsonKey(name: 'points_required')
   final int pointsRequired;
   @override
-  @JsonKey(name: 'is_claimed')
-  final bool isClaimed;
+  @JsonKey(name: 'is_active')
+  final bool isActive;
+  @override
+  @JsonKey(name: 'image_url')
+  final String? imageUrl;
+  @override
+  @JsonKey(name: 'expiry_date')
+  final DateTime? expiryDate;
 
   /// Create a copy of RewardModel
   /// with the given fields replaced by the non-null parameter values.
@@ -167,18 +195,22 @@ class _RewardModel implements RewardModel {
                 other.description == description) &&
             (identical(other.pointsRequired, pointsRequired) ||
                 other.pointsRequired == pointsRequired) &&
-            (identical(other.isClaimed, isClaimed) ||
-                other.isClaimed == isClaimed));
+            (identical(other.isActive, isActive) ||
+                other.isActive == isActive) &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl) &&
+            (identical(other.expiryDate, expiryDate) ||
+                other.expiryDate == expiryDate));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, name, description, pointsRequired, isClaimed);
+  int get hashCode => Object.hash(runtimeType, id, name, description,
+      pointsRequired, isActive, imageUrl, expiryDate);
 
   @override
   String toString() {
-    return 'RewardModel(id: $id, name: $name, description: $description, pointsRequired: $pointsRequired, isClaimed: $isClaimed)';
+    return 'RewardModel(id: $id, name: $name, description: $description, pointsRequired: $pointsRequired, isActive: $isActive, imageUrl: $imageUrl, expiryDate: $expiryDate)';
   }
 }
 
@@ -195,7 +227,9 @@ abstract mixin class _$RewardModelCopyWith<$Res>
       String name,
       String description,
       @JsonKey(name: 'points_required') int pointsRequired,
-      @JsonKey(name: 'is_claimed') bool isClaimed});
+      @JsonKey(name: 'is_active') bool isActive,
+      @JsonKey(name: 'image_url') String? imageUrl,
+      @JsonKey(name: 'expiry_date') DateTime? expiryDate});
 }
 
 /// @nodoc
@@ -214,7 +248,9 @@ class __$RewardModelCopyWithImpl<$Res> implements _$RewardModelCopyWith<$Res> {
     Object? name = null,
     Object? description = null,
     Object? pointsRequired = null,
-    Object? isClaimed = null,
+    Object? isActive = null,
+    Object? imageUrl = freezed,
+    Object? expiryDate = freezed,
   }) {
     return _then(_RewardModel(
       id: null == id
@@ -233,10 +269,18 @@ class __$RewardModelCopyWithImpl<$Res> implements _$RewardModelCopyWith<$Res> {
           ? _self.pointsRequired
           : pointsRequired // ignore: cast_nullable_to_non_nullable
               as int,
-      isClaimed: null == isClaimed
-          ? _self.isClaimed
-          : isClaimed // ignore: cast_nullable_to_non_nullable
+      isActive: null == isActive
+          ? _self.isActive
+          : isActive // ignore: cast_nullable_to_non_nullable
               as bool,
+      imageUrl: freezed == imageUrl
+          ? _self.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      expiryDate: freezed == expiryDate
+          ? _self.expiryDate
+          : expiryDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ));
   }
 }
