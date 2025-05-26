@@ -4,8 +4,8 @@ import 'package:espress_yo_self/domain/repositories/stamp_progress_repository.da
 class GetStampProgressUsecase {
   final StampProgressRepository repository;
   GetStampProgressUsecase(this.repository);
-  Future<StampProgressEntity> call() async {
-    return await repository.getStampProgress();
+  Future<StampProgressEntity> call(String userId) async {
+    return await repository.getStampProgress(userId);
   }
 }
 

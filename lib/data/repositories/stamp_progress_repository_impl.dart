@@ -9,14 +9,26 @@ class StampProgressRepositoryImpl implements StampProgressRepository {
   final _collection = 'stamp_progress';
 
   @override
-  Future<StampProgressEntity> getStampProgress() {
+  Future<StampProgressEntity> getStampProgress(String userId) {
     return safeCall(() async {
-      final query = await _firestore.collection(_collection).limit(1).get();
-      if (query.docs.isEmpty) {
-        throw Exception('Stamp progress not found');
+      final doc = await _firestore.collection(_collection).doc(userId).get();
+      
+      if (!doc.exists) {
+        await _createDefaultStampProgress(userId);
+        
+        return StampProgressEntity(
+          userId: userId,
+          stampsCollected: 0,
+          stampsRequired: 10,
+          lastUpdated: DateTime.now(),
+        );
       }
-      final data = query.docs.first.data();
-      final model = StampProgressModel.fromJson(data);
+      
+      final data = doc.data()!;
+      final model = StampProgressModel.fromJson({
+        'user_id': userId,
+        ...data,
+      });
       return model.toEntity();
     }, label: 'getStampProgress');
   }
@@ -24,9 +36,21 @@ class StampProgressRepositoryImpl implements StampProgressRepository {
   @override
   Future<void> updateStampProgress(String userId, int stamps) {
     return safeCall(() async {
-      await _firestore.collection(_collection).doc(userId).update({
+      await _firestore.collection(_collection).doc(userId).set({
+        'user_id': userId,
         'stamps_collected': stamps,
-      });
+        'stamps_required': 10,
+        'last_updated': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
     }, label: 'updateStampProgress');
+  }
+
+  Future<void> _createDefaultStampProgress(String userId) async {
+    await _firestore.collection(_collection).doc(userId).set({
+      'user_id': userId,
+      'stamps_collected': 0,
+      'stamps_required': 10,
+      'last_updated': FieldValue.serverTimestamp(),
+    });
   }
 }
