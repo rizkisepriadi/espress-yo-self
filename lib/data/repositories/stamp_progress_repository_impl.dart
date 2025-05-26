@@ -22,15 +22,6 @@ class StampProgressRepositoryImpl implements StampProgressRepository {
   }
 
   @override
-  Future<void> redeemReward(String userId, String rewardId) {
-    return safeCall(() async {
-      await _firestore.collection(_collection).doc(userId).update({
-        'reward_redeemed': FieldValue.arrayUnion([rewardId])
-      });
-    }, label: 'redeemReward');
-  }
-
-  @override
   Future<void> updateStampProgress(String userId, int stamps) {
     return safeCall(() async {
       await _firestore.collection(_collection).doc(userId).update({

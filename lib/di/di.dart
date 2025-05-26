@@ -34,12 +34,6 @@ final updateUserPointsUseCaseProvider =
   return UpdateUserPointsUsecase(repository);
 });
 
-// Redeem Reward Usecase
-final redeemRewardUseCaseProvider = Provider<RedeemRewardUsecase>((ref) {
-  final repository = ref.watch(userRepositoryProvider);
-  return RedeemRewardUsecase(repository);
-});
-
 // Update Stamp Progress Usecase
 final updateStampProgressUseCaseProvider =
     Provider<UpdateStampProgressUsecase>((ref) {
@@ -59,14 +53,12 @@ final getUserViewModelProvider =
     StateNotifierProvider<UserViewModel, AsyncValue<UserEntity>>((ref) {
   final getUserUsecase = ref.watch(getUserUseCaseProvider);
   final updateUserPointsUsecase = ref.watch(updateUserPointsUseCaseProvider);
-  final redeemRewardUsecase = ref.watch(redeemRewardUseCaseProvider);
   final updateStampProgressUsecase =
       ref.watch(updateStampProgressUseCaseProvider);
   final updateUserProfileUsecase = ref.watch(updateUserProfileUseCaseProvider);
   return UserViewModel(
     getUserUsecase: getUserUsecase,
     updateUserPointsUsecase: updateUserPointsUsecase,
-    redeemRewardUsecase: redeemRewardUsecase,
     updateStampProgressUsecase: updateStampProgressUsecase,
     updateUserProfileUsecase: updateUserProfileUsecase,
   );

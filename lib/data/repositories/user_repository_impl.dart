@@ -40,28 +40,6 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<void> redeemReward(String userId, String rewardId) async {
-    return await safeCall(() async {
-      final userDoc = firestore.collection('users').doc(userId);
-      final userSnapshot = await userDoc.get();
-
-      if (!userSnapshot.exists) {
-        throw Exception('User not found');
-      }
-
-      final userData = userSnapshot.data()!;
-      final redeemedRewards =
-          List<String>.from(userData['redeemed_rewards'] ?? []);
-      if (redeemedRewards.contains(rewardId)) {
-        throw Exception('Reward already redeemed');
-      }
-
-      redeemedRewards.add(rewardId);
-      await userDoc.update({'redeemed_rewards': redeemedRewards});
-    }, label: 'redeemReward');
-  }
-
-  @override
   Future<void> updateStampProgress(String userId, int stamps) async {
     return await safeCall(() async {
       final userDoc = firestore.collection('users').doc(userId);

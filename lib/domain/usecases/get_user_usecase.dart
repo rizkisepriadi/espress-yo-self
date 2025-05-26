@@ -20,17 +20,6 @@ class UpdateUserPointsUsecase {
     return await repository.updateUserPoints(userId, points);
   }
 }
-
-class RedeemRewardUsecase {
-  final UserRepository repository;
-
-  RedeemRewardUsecase(this.repository);
-
-  Future<void> call(String userId, String rewardId) async {
-    return await repository.redeemReward(userId, rewardId);
-  }
-}
-
 class UpdateStampProgressUsecase {
   final UserRepository repository;
 
