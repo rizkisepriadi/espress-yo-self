@@ -15,10 +15,12 @@ class FloatingButton extends StatelessWidget {
       height: 102.h,
       decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: Colors.white,
+          color: colorScheme.surface,
           boxShadow: [
             BoxShadow(
-                color: Colors.black12, blurRadius: 8, offset: Offset(0, 4))
+              color: Colors.black12,
+              offset: Offset(0, 4.h),
+            )
           ]),
       padding: EdgeInsets.all(12.w),
       child: FloatingActionButton(
