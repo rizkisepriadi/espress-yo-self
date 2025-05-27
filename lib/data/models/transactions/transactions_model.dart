@@ -11,6 +11,12 @@ abstract class TransactionsModel with _$TransactionsModel {
     @JsonKey(name: 'user_id') required String userId,
     @JsonKey(name: 'time_stamp') required String timeStamp,
     @JsonKey(name: 'points_earned') required int pointsEarned,
+    @JsonKey(name: 'transaction_type') required String transactionType,
+    required String title,
+    required String description,
+    @JsonKey(name: 'order_id') String? orderId,
+    @JsonKey(name: 'reward_id') String? rewardId,
+    double? amount,
   }) = _TransactionsModel;
 
   factory TransactionsModel.fromJson(Map<String, dynamic> json) =>
@@ -19,12 +25,29 @@ abstract class TransactionsModel with _$TransactionsModel {
 
 extension TransactionsModelMapper on TransactionsModel {
   TransactionsEntitty toEntity() => TransactionsEntitty(
-      id: id, userId: userId, timeStamp: timeStamp, pointsEarned: pointsEarned);
+        id: id,
+        userId: userId,
+        timeStamp: timeStamp,
+        pointsEarned: pointsEarned,
+        transactionType: transactionType,
+        title: title,
+        description: description,
+        orderId: orderId,
+        rewardId: rewardId,
+        amount: amount,
+      );
 
   static TransactionsModel fromEntity(TransactionsEntitty entity) =>
       TransactionsModel(
-          id: entity.id,
-          userId: entity.userId,
-          timeStamp: entity.timeStamp,
-          pointsEarned: entity.pointsEarned);
+        id: entity.id,
+        userId: entity.userId,
+        timeStamp: entity.timeStamp,
+        pointsEarned: entity.pointsEarned,
+        transactionType: entity.transactionType,
+        title: entity.title,
+        description: entity.description,
+        orderId: entity.orderId,
+        rewardId: entity.rewardId,
+        amount: entity.amount,
+      );
 }

@@ -22,6 +22,15 @@ mixin _$TransactionsModel {
   String get timeStamp;
   @JsonKey(name: 'points_earned')
   int get pointsEarned;
+  @JsonKey(name: 'transaction_type')
+  String get transactionType;
+  String get title;
+  String get description;
+  @JsonKey(name: 'order_id')
+  String? get orderId;
+  @JsonKey(name: 'reward_id')
+  String? get rewardId;
+  double? get amount;
 
   /// Create a copy of TransactionsModel
   /// with the given fields replaced by the non-null parameter values.
@@ -44,17 +53,36 @@ mixin _$TransactionsModel {
             (identical(other.timeStamp, timeStamp) ||
                 other.timeStamp == timeStamp) &&
             (identical(other.pointsEarned, pointsEarned) ||
-                other.pointsEarned == pointsEarned));
+                other.pointsEarned == pointsEarned) &&
+            (identical(other.transactionType, transactionType) ||
+                other.transactionType == transactionType) &&
+            (identical(other.title, title) || other.title == title) &&
+            (identical(other.description, description) ||
+                other.description == description) &&
+            (identical(other.orderId, orderId) || other.orderId == orderId) &&
+            (identical(other.rewardId, rewardId) ||
+                other.rewardId == rewardId) &&
+            (identical(other.amount, amount) || other.amount == amount));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, userId, timeStamp, pointsEarned);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      userId,
+      timeStamp,
+      pointsEarned,
+      transactionType,
+      title,
+      description,
+      orderId,
+      rewardId,
+      amount);
 
   @override
   String toString() {
-    return 'TransactionsModel(id: $id, userId: $userId, timeStamp: $timeStamp, pointsEarned: $pointsEarned)';
+    return 'TransactionsModel(id: $id, userId: $userId, timeStamp: $timeStamp, pointsEarned: $pointsEarned, transactionType: $transactionType, title: $title, description: $description, orderId: $orderId, rewardId: $rewardId, amount: $amount)';
   }
 }
 
@@ -68,7 +96,13 @@ abstract mixin class $TransactionsModelCopyWith<$Res> {
       {String id,
       @JsonKey(name: 'user_id') String userId,
       @JsonKey(name: 'time_stamp') String timeStamp,
-      @JsonKey(name: 'points_earned') int pointsEarned});
+      @JsonKey(name: 'points_earned') int pointsEarned,
+      @JsonKey(name: 'transaction_type') String transactionType,
+      String title,
+      String description,
+      @JsonKey(name: 'order_id') String? orderId,
+      @JsonKey(name: 'reward_id') String? rewardId,
+      double? amount});
 }
 
 /// @nodoc
@@ -88,6 +122,12 @@ class _$TransactionsModelCopyWithImpl<$Res>
     Object? userId = null,
     Object? timeStamp = null,
     Object? pointsEarned = null,
+    Object? transactionType = null,
+    Object? title = null,
+    Object? description = null,
+    Object? orderId = freezed,
+    Object? rewardId = freezed,
+    Object? amount = freezed,
   }) {
     return _then(_self.copyWith(
       id: null == id
@@ -106,6 +146,30 @@ class _$TransactionsModelCopyWithImpl<$Res>
           ? _self.pointsEarned
           : pointsEarned // ignore: cast_nullable_to_non_nullable
               as int,
+      transactionType: null == transactionType
+          ? _self.transactionType
+          : transactionType // ignore: cast_nullable_to_non_nullable
+              as String,
+      title: null == title
+          ? _self.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String,
+      description: null == description
+          ? _self.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String,
+      orderId: freezed == orderId
+          ? _self.orderId
+          : orderId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      rewardId: freezed == rewardId
+          ? _self.rewardId
+          : rewardId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      amount: freezed == amount
+          ? _self.amount
+          : amount // ignore: cast_nullable_to_non_nullable
+              as double?,
     ));
   }
 }
@@ -117,7 +181,13 @@ class _TransactionsModel implements TransactionsModel {
       {required this.id,
       @JsonKey(name: 'user_id') required this.userId,
       @JsonKey(name: 'time_stamp') required this.timeStamp,
-      @JsonKey(name: 'points_earned') required this.pointsEarned});
+      @JsonKey(name: 'points_earned') required this.pointsEarned,
+      @JsonKey(name: 'transaction_type') required this.transactionType,
+      required this.title,
+      required this.description,
+      @JsonKey(name: 'order_id') this.orderId,
+      @JsonKey(name: 'reward_id') this.rewardId,
+      this.amount});
   factory _TransactionsModel.fromJson(Map<String, dynamic> json) =>
       _$TransactionsModelFromJson(json);
 
@@ -132,6 +202,21 @@ class _TransactionsModel implements TransactionsModel {
   @override
   @JsonKey(name: 'points_earned')
   final int pointsEarned;
+  @override
+  @JsonKey(name: 'transaction_type')
+  final String transactionType;
+  @override
+  final String title;
+  @override
+  final String description;
+  @override
+  @JsonKey(name: 'order_id')
+  final String? orderId;
+  @override
+  @JsonKey(name: 'reward_id')
+  final String? rewardId;
+  @override
+  final double? amount;
 
   /// Create a copy of TransactionsModel
   /// with the given fields replaced by the non-null parameter values.
@@ -158,17 +243,36 @@ class _TransactionsModel implements TransactionsModel {
             (identical(other.timeStamp, timeStamp) ||
                 other.timeStamp == timeStamp) &&
             (identical(other.pointsEarned, pointsEarned) ||
-                other.pointsEarned == pointsEarned));
+                other.pointsEarned == pointsEarned) &&
+            (identical(other.transactionType, transactionType) ||
+                other.transactionType == transactionType) &&
+            (identical(other.title, title) || other.title == title) &&
+            (identical(other.description, description) ||
+                other.description == description) &&
+            (identical(other.orderId, orderId) || other.orderId == orderId) &&
+            (identical(other.rewardId, rewardId) ||
+                other.rewardId == rewardId) &&
+            (identical(other.amount, amount) || other.amount == amount));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, userId, timeStamp, pointsEarned);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      userId,
+      timeStamp,
+      pointsEarned,
+      transactionType,
+      title,
+      description,
+      orderId,
+      rewardId,
+      amount);
 
   @override
   String toString() {
-    return 'TransactionsModel(id: $id, userId: $userId, timeStamp: $timeStamp, pointsEarned: $pointsEarned)';
+    return 'TransactionsModel(id: $id, userId: $userId, timeStamp: $timeStamp, pointsEarned: $pointsEarned, transactionType: $transactionType, title: $title, description: $description, orderId: $orderId, rewardId: $rewardId, amount: $amount)';
   }
 }
 
@@ -184,7 +288,13 @@ abstract mixin class _$TransactionsModelCopyWith<$Res>
       {String id,
       @JsonKey(name: 'user_id') String userId,
       @JsonKey(name: 'time_stamp') String timeStamp,
-      @JsonKey(name: 'points_earned') int pointsEarned});
+      @JsonKey(name: 'points_earned') int pointsEarned,
+      @JsonKey(name: 'transaction_type') String transactionType,
+      String title,
+      String description,
+      @JsonKey(name: 'order_id') String? orderId,
+      @JsonKey(name: 'reward_id') String? rewardId,
+      double? amount});
 }
 
 /// @nodoc
@@ -204,6 +314,12 @@ class __$TransactionsModelCopyWithImpl<$Res>
     Object? userId = null,
     Object? timeStamp = null,
     Object? pointsEarned = null,
+    Object? transactionType = null,
+    Object? title = null,
+    Object? description = null,
+    Object? orderId = freezed,
+    Object? rewardId = freezed,
+    Object? amount = freezed,
   }) {
     return _then(_TransactionsModel(
       id: null == id
@@ -222,6 +338,30 @@ class __$TransactionsModelCopyWithImpl<$Res>
           ? _self.pointsEarned
           : pointsEarned // ignore: cast_nullable_to_non_nullable
               as int,
+      transactionType: null == transactionType
+          ? _self.transactionType
+          : transactionType // ignore: cast_nullable_to_non_nullable
+              as String,
+      title: null == title
+          ? _self.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String,
+      description: null == description
+          ? _self.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String,
+      orderId: freezed == orderId
+          ? _self.orderId
+          : orderId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      rewardId: freezed == rewardId
+          ? _self.rewardId
+          : rewardId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      amount: freezed == amount
+          ? _self.amount
+          : amount // ignore: cast_nullable_to_non_nullable
+              as double?,
     ));
   }
 }

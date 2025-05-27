@@ -12,6 +12,12 @@ _TransactionsModel _$TransactionsModelFromJson(Map<String, dynamic> json) =>
       userId: json['user_id'] as String,
       timeStamp: json['time_stamp'] as String,
       pointsEarned: (json['points_earned'] as num).toInt(),
+      transactionType: json['transaction_type'] as String,
+      title: json['title'] as String,
+      description: json['description'] as String,
+      orderId: json['order_id'] as String?,
+      rewardId: json['reward_id'] as String?,
+      amount: (json['amount'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$TransactionsModelToJson(_TransactionsModel instance) =>
@@ -20,4 +26,10 @@ Map<String, dynamic> _$TransactionsModelToJson(_TransactionsModel instance) =>
       'user_id': instance.userId,
       'time_stamp': instance.timeStamp,
       'points_earned': instance.pointsEarned,
+      'transaction_type': instance.transactionType,
+      'title': instance.title,
+      'description': instance.description,
+      'order_id': instance.orderId,
+      'reward_id': instance.rewardId,
+      'amount': instance.amount,
     };
