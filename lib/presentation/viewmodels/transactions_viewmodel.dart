@@ -3,20 +3,21 @@ import 'package:espress_yo_self/domain/usecases/transactions_usecase.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class TransactionsViewmodel
-    extends StateNotifier<AsyncValue<TransactionsEntitty>> {
-  final GetUserTransactionsUsecase getTransactions;
+    extends StateNotifier<AsyncValue<List<TransactionsEntitty>>> {
+  final GetUserTransactionsUsecase getUserTransactions;
   final AddTransactionUsecase addTransactionUsecase;
+  final AddDetailedTransactionUsecase addDetailedTransactionUsecase;
 
   TransactionsViewmodel({
-    required this.getTransactions,
+    required this.getUserTransactions,
     required this.addTransactionUsecase,
-  }) : super(const AsyncValue.loading()) {
-    fetchTransactions();
-  }
+    required this.addDetailedTransactionUsecase,
+  }) : super(const AsyncValue.loading());
 
-  Future<void> fetchTransactions() async {
+  Future<void> fetchUserTransactions(String userId) async {
     try {
-      final transactions = await getTransactions.call();
+      state = const AsyncValue.loading();
+      final transactions = await getUserTransactions.call(userId);
       if (!mounted) return;
       state = AsyncValue.data(transactions);
     } catch (e, stack) {
@@ -25,11 +26,48 @@ class TransactionsViewmodel
     }
   }
 
-  Future<void> addTransaction(String userId, int points) async {
+  Future<void> addCoffeePurchaseTransaction({
+    required String userId,
+    required String coffeeName,
+    required double amount,
+    required int pointsEarned,
+    String? orderId,
+  }) async {
     try {
-      await addTransactionUsecase.call(userId, points);
+      await addDetailedTransactionUsecase.call(
+        userId: userId,
+        points: pointsEarned,
+        transactionType: 'purchase',
+        title: 'Coffee Purchase',
+        description: coffeeName,
+        orderId: orderId,
+        amount: amount,
+      );
       if (!mounted) return;
-      await fetchTransactions();
+      await fetchUserTransactions(userId);
+    } catch (e, stack) {
+      if (!mounted) return;
+      state = AsyncValue.error(e, stack);
+    }
+  }
+
+  Future<void> addRewardRedemptionTransaction({
+    required String userId,
+    required String rewardName,
+    required int pointsUsed,
+    String? rewardId,
+  }) async {
+    try {
+      await addDetailedTransactionUsecase.call(
+        userId: userId,
+        points: -pointsUsed,
+        transactionType: 'reward_redeem',
+        title: 'Reward Redeemed',
+        description: rewardName,
+        rewardId: rewardId,
+      );
+      if (!mounted) return;
+      await fetchUserTransactions(userId);
     } catch (e, stack) {
       if (!mounted) return;
       state = AsyncValue.error(e, stack);
