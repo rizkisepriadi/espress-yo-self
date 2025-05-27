@@ -17,8 +17,55 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
         'user_id': userId,
         'time_stamp': DateTime.now().toIso8601String(),
         'points_earned': points,
+        'transaction_type': 'manual',
+        'title': 'Points Added',
+        'description': 'Manual points addition',
       });
     }, label: 'addTransaction');
+  }
+
+  @override
+  Future<void> addDetailedTransaction({
+    required String userId,
+    required int points,
+    required String transactionType,
+    required String title,
+    required String description,
+    String? orderId,
+    String? rewardId,
+    double? amount,
+  }) {
+    return safeCall(() async {
+      final docRef = _firestore.collection(_collection).doc();
+      await docRef.set({
+        'id': docRef.id,
+        'user_id': userId,
+        'time_stamp': DateTime.now().toIso8601String(),
+        'points_earned': points,
+        'transaction_type': transactionType,
+        'title': title,
+        'description': description,
+        'order_id': orderId,
+        'reward_id': rewardId,
+        'amount': amount,
+      });
+    }, label: 'addDetailedTransaction');
+  }
+
+  @override
+  Future<List<TransactionsEntitty>> getUserTransactions(String userId) {
+    return safeCall(() async {
+      final query = await _firestore
+          .collection(_collection)
+          .where('user_id', isEqualTo: userId)
+          .orderBy('time_stamp', descending: true)
+          .get();
+
+      return query.docs.map((doc) {
+        final data = doc.data();
+        return TransactionsModel.fromJson(data).toEntity();
+      }).toList();
+    }, label: 'getUserTransactions');
   }
 
   @override
