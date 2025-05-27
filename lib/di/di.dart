@@ -5,6 +5,7 @@ import 'package:espress_yo_self/data/repositories/stamp_progress_repository_impl
 import 'package:espress_yo_self/data/repositories/transactions_repository_impl.dart';
 import 'package:espress_yo_self/data/services/auth_service.dart';
 import 'package:espress_yo_self/domain/entities/user_entity.dart';
+import 'package:espress_yo_self/domain/entities/transactions_entitty.dart';
 import 'package:espress_yo_self/domain/repositories/reward_repository.dart';
 import 'package:espress_yo_self/domain/repositories/user_repository.dart';
 import 'package:espress_yo_self/domain/repositories/stamp_progress_repository.dart';
@@ -16,6 +17,7 @@ import 'package:espress_yo_self/domain/usecases/transactions_usecase.dart';
 import 'package:espress_yo_self/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:espress_yo_self/presentation/viewmodels/reward_viewmodel.dart';
 import 'package:espress_yo_self/presentation/viewmodels/user_viewmodel.dart';
+import 'package:espress_yo_self/presentation/viewmodels/transactions_viewmodel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -143,10 +145,21 @@ final addTransactionUseCaseProvider = Provider<AddTransactionUsecase>((ref) {
   return AddTransactionUsecase(repository);
 });
 
+final addDetailedTransactionUseCaseProvider =
+    Provider<AddDetailedTransactionUsecase>((ref) {
+  final repository = ref.watch(transactionsRepositoryProvider);
+  return AddDetailedTransactionUsecase(repository);
+});
+
 final getUserTransactionsUseCaseProvider =
     Provider<GetUserTransactionsUsecase>((ref) {
   final repository = ref.watch(transactionsRepositoryProvider);
   return GetUserTransactionsUsecase(repository);
+});
+
+final getTransactionsUseCaseProvider = Provider<GetTransactionsUsecase>((ref) {
+  final repository = ref.watch(transactionsRepositoryProvider);
+  return GetTransactionsUsecase(repository);
 });
 
 // ==================== VIEWMODELS ====================
@@ -205,5 +218,20 @@ final stampProgressViewModelProvider = StateNotifierProvider<
   return StampProgressViewModel(
     getStampProgressUsecase: getStampProgressUsecase,
     updateStampProgressRepoUsecase: updateStampProgressRepoUsecase,
+  );
+});
+
+final transactionsViewModelProvider = StateNotifierProvider<
+    TransactionsViewmodel, AsyncValue<List<TransactionsEntitty>>>((ref) {
+  final getUserTransactionsUsecase =
+      ref.watch(getUserTransactionsUseCaseProvider);
+  final addTransactionUsecase = ref.watch(addTransactionUseCaseProvider);
+  final addDetailedTransactionUsecase =
+      ref.watch(addDetailedTransactionUseCaseProvider);
+
+  return TransactionsViewmodel(
+    getUserTransactions: getUserTransactionsUsecase,
+    addTransactionUsecase: addTransactionUsecase,
+    addDetailedTransactionUsecase: addDetailedTransactionUsecase,
   );
 });
