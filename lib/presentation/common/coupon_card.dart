@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class CouponButton extends StatefulWidget {
-  const CouponButton(
+class CouponCard extends StatefulWidget {
+  const CouponCard(
       {super.key, this.title, this.onPressed, this.icon, this.description});
 
   final String? title;
@@ -12,10 +12,10 @@ class CouponButton extends StatefulWidget {
   final String? description;
 
   @override
-  State<CouponButton> createState() => _CouponButtonState();
+  State<CouponCard> createState() => _CouponCardState();
 }
 
-class _CouponButtonState extends State<CouponButton> {
+class _CouponCardState extends State<CouponCard> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
