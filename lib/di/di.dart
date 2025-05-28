@@ -151,6 +151,12 @@ final addDetailedTransactionUseCaseProvider =
   return AddDetailedTransactionUsecase(repository);
 });
 
+final addTransactionFromQRUseCaseProvider =
+    Provider<AddTransactionFromQRUsecase>((ref) {
+  final repository = ref.watch(transactionsRepositoryProvider);
+  return AddTransactionFromQRUsecase(repository);
+});
+
 final getUserTransactionsUseCaseProvider =
     Provider<GetUserTransactionsUsecase>((ref) {
   final repository = ref.watch(transactionsRepositoryProvider);
@@ -228,10 +234,13 @@ final transactionsViewModelProvider = StateNotifierProvider<
   final addTransactionUsecase = ref.watch(addTransactionUseCaseProvider);
   final addDetailedTransactionUsecase =
       ref.watch(addDetailedTransactionUseCaseProvider);
+  final addTransactionFromQRUsecase =
+      ref.watch(addTransactionFromQRUseCaseProvider);
 
   return TransactionsViewmodel(
     getUserTransactions: getUserTransactionsUsecase,
     addTransactionUsecase: addTransactionUsecase,
     addDetailedTransactionUsecase: addDetailedTransactionUsecase,
+    addTransactionFromQRUsecase: addTransactionFromQRUsecase,
   );
 });

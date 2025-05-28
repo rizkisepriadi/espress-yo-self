@@ -10,6 +10,21 @@ class AddTransactionUsecase {
   }
 }
 
+class AddTransactionFromQRUsecase {
+  final TransactionsRepository repository;
+  AddTransactionFromQRUsecase(this.repository);
+
+  Future<void> call({
+    required String userId,
+    required String qrData,
+  }) async {
+    return await repository.addTransactionFromQR(
+      userId: userId,
+      qrData: qrData,
+    );
+  }
+}
+
 class AddDetailedTransactionUsecase {
   final TransactionsRepository repository;
   AddDetailedTransactionUsecase(this.repository);
@@ -23,6 +38,10 @@ class AddDetailedTransactionUsecase {
     String? orderId,
     String? rewardId,
     double? amount,
+    String? imageUrl,
+    String? image250Url,
+    bool isEcoFriendly = false,
+    int ecoPointsBonus = 0,
   }) async {
     return await repository.addDetailedTransaction(
       userId: userId,
@@ -33,6 +52,10 @@ class AddDetailedTransactionUsecase {
       orderId: orderId,
       rewardId: rewardId,
       amount: amount,
+      imageUrl: imageUrl,
+      image250Url: image250Url,
+      isEcoFriendly: isEcoFriendly,
+      ecoPointsBonus: ecoPointsBonus,
     );
   }
 }
