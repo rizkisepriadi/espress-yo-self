@@ -14,5 +14,14 @@ abstract class TransactionsRepository {
     String? orderId,
     String? rewardId,
     double? amount,
+    String? imageUrl,
+    String? image250Url,
+    bool isEcoFriendly = false,
+    int ecoPointsBonus = 0,
+  });
+
+  Future<void> addTransactionFromQR({
+    required String userId,
+    required String qrData,
   });
 }
