@@ -17,6 +17,10 @@ abstract class TransactionsModel with _$TransactionsModel {
     @JsonKey(name: 'order_id') String? orderId,
     @JsonKey(name: 'reward_id') String? rewardId,
     double? amount,
+    @JsonKey(name: 'is_eco_friendly') @Default(false) bool isEcoFriendly,
+    @JsonKey(name: 'eco_points_bonus') @Default(0) int ecoPointsBonus,
+    @JsonKey(name: 'image_url') String? imageUrl,
+    @JsonKey(name: 'image_250_url') String? image250Url,
   }) = _TransactionsModel;
 
   factory TransactionsModel.fromJson(Map<String, dynamic> json) =>
@@ -35,6 +39,10 @@ extension TransactionsModelMapper on TransactionsModel {
         orderId: orderId,
         rewardId: rewardId,
         amount: amount,
+        isEcoFriendly: isEcoFriendly,
+        ecoPointsBonus: ecoPointsBonus,
+        imageUrl: imageUrl,
+        image250Url: image250Url,
       );
 
   static TransactionsModel fromEntity(TransactionsEntitty entity) =>
@@ -49,5 +57,9 @@ extension TransactionsModelMapper on TransactionsModel {
         orderId: entity.orderId,
         rewardId: entity.rewardId,
         amount: entity.amount,
+        isEcoFriendly: entity.isEcoFriendly,
+        ecoPointsBonus: entity.ecoPointsBonus,
+        imageUrl: entity.imageUrl,
+        image250Url: entity.image250Url,
       );
 }

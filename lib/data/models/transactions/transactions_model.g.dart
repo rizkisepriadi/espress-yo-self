@@ -18,6 +18,10 @@ _TransactionsModel _$TransactionsModelFromJson(Map<String, dynamic> json) =>
       orderId: json['order_id'] as String?,
       rewardId: json['reward_id'] as String?,
       amount: (json['amount'] as num?)?.toDouble(),
+      isEcoFriendly: json['is_eco_friendly'] as bool? ?? false,
+      ecoPointsBonus: (json['eco_points_bonus'] as num?)?.toInt() ?? 0,
+      imageUrl: json['image_url'] as String?,
+      image250Url: json['image_250_url'] as String?,
     );
 
 Map<String, dynamic> _$TransactionsModelToJson(_TransactionsModel instance) =>
@@ -32,4 +36,8 @@ Map<String, dynamic> _$TransactionsModelToJson(_TransactionsModel instance) =>
       'order_id': instance.orderId,
       'reward_id': instance.rewardId,
       'amount': instance.amount,
+      'is_eco_friendly': instance.isEcoFriendly,
+      'eco_points_bonus': instance.ecoPointsBonus,
+      'image_url': instance.imageUrl,
+      'image_250_url': instance.image250Url,
     };

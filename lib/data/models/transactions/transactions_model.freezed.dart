@@ -31,6 +31,14 @@ mixin _$TransactionsModel {
   @JsonKey(name: 'reward_id')
   String? get rewardId;
   double? get amount;
+  @JsonKey(name: 'is_eco_friendly')
+  bool get isEcoFriendly;
+  @JsonKey(name: 'eco_points_bonus')
+  int get ecoPointsBonus;
+  @JsonKey(name: 'image_url')
+  String? get imageUrl;
+  @JsonKey(name: 'image_250_url')
+  String? get image250Url;
 
   /// Create a copy of TransactionsModel
   /// with the given fields replaced by the non-null parameter values.
@@ -62,7 +70,15 @@ mixin _$TransactionsModel {
             (identical(other.orderId, orderId) || other.orderId == orderId) &&
             (identical(other.rewardId, rewardId) ||
                 other.rewardId == rewardId) &&
-            (identical(other.amount, amount) || other.amount == amount));
+            (identical(other.amount, amount) || other.amount == amount) &&
+            (identical(other.isEcoFriendly, isEcoFriendly) ||
+                other.isEcoFriendly == isEcoFriendly) &&
+            (identical(other.ecoPointsBonus, ecoPointsBonus) ||
+                other.ecoPointsBonus == ecoPointsBonus) &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl) &&
+            (identical(other.image250Url, image250Url) ||
+                other.image250Url == image250Url));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -78,11 +94,15 @@ mixin _$TransactionsModel {
       description,
       orderId,
       rewardId,
-      amount);
+      amount,
+      isEcoFriendly,
+      ecoPointsBonus,
+      imageUrl,
+      image250Url);
 
   @override
   String toString() {
-    return 'TransactionsModel(id: $id, userId: $userId, timeStamp: $timeStamp, pointsEarned: $pointsEarned, transactionType: $transactionType, title: $title, description: $description, orderId: $orderId, rewardId: $rewardId, amount: $amount)';
+    return 'TransactionsModel(id: $id, userId: $userId, timeStamp: $timeStamp, pointsEarned: $pointsEarned, transactionType: $transactionType, title: $title, description: $description, orderId: $orderId, rewardId: $rewardId, amount: $amount, isEcoFriendly: $isEcoFriendly, ecoPointsBonus: $ecoPointsBonus, imageUrl: $imageUrl, image250Url: $image250Url)';
   }
 }
 
@@ -102,7 +122,11 @@ abstract mixin class $TransactionsModelCopyWith<$Res> {
       String description,
       @JsonKey(name: 'order_id') String? orderId,
       @JsonKey(name: 'reward_id') String? rewardId,
-      double? amount});
+      double? amount,
+      @JsonKey(name: 'is_eco_friendly') bool isEcoFriendly,
+      @JsonKey(name: 'eco_points_bonus') int ecoPointsBonus,
+      @JsonKey(name: 'image_url') String? imageUrl,
+      @JsonKey(name: 'image_250_url') String? image250Url});
 }
 
 /// @nodoc
@@ -128,6 +152,10 @@ class _$TransactionsModelCopyWithImpl<$Res>
     Object? orderId = freezed,
     Object? rewardId = freezed,
     Object? amount = freezed,
+    Object? isEcoFriendly = null,
+    Object? ecoPointsBonus = null,
+    Object? imageUrl = freezed,
+    Object? image250Url = freezed,
   }) {
     return _then(_self.copyWith(
       id: null == id
@@ -170,6 +198,22 @@ class _$TransactionsModelCopyWithImpl<$Res>
           ? _self.amount
           : amount // ignore: cast_nullable_to_non_nullable
               as double?,
+      isEcoFriendly: null == isEcoFriendly
+          ? _self.isEcoFriendly
+          : isEcoFriendly // ignore: cast_nullable_to_non_nullable
+              as bool,
+      ecoPointsBonus: null == ecoPointsBonus
+          ? _self.ecoPointsBonus
+          : ecoPointsBonus // ignore: cast_nullable_to_non_nullable
+              as int,
+      imageUrl: freezed == imageUrl
+          ? _self.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      image250Url: freezed == image250Url
+          ? _self.image250Url
+          : image250Url // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -187,7 +231,11 @@ class _TransactionsModel implements TransactionsModel {
       required this.description,
       @JsonKey(name: 'order_id') this.orderId,
       @JsonKey(name: 'reward_id') this.rewardId,
-      this.amount});
+      this.amount,
+      @JsonKey(name: 'is_eco_friendly') this.isEcoFriendly = false,
+      @JsonKey(name: 'eco_points_bonus') this.ecoPointsBonus = 0,
+      @JsonKey(name: 'image_url') this.imageUrl,
+      @JsonKey(name: 'image_250_url') this.image250Url});
   factory _TransactionsModel.fromJson(Map<String, dynamic> json) =>
       _$TransactionsModelFromJson(json);
 
@@ -217,6 +265,18 @@ class _TransactionsModel implements TransactionsModel {
   final String? rewardId;
   @override
   final double? amount;
+  @override
+  @JsonKey(name: 'is_eco_friendly')
+  final bool isEcoFriendly;
+  @override
+  @JsonKey(name: 'eco_points_bonus')
+  final int ecoPointsBonus;
+  @override
+  @JsonKey(name: 'image_url')
+  final String? imageUrl;
+  @override
+  @JsonKey(name: 'image_250_url')
+  final String? image250Url;
 
   /// Create a copy of TransactionsModel
   /// with the given fields replaced by the non-null parameter values.
@@ -252,7 +312,15 @@ class _TransactionsModel implements TransactionsModel {
             (identical(other.orderId, orderId) || other.orderId == orderId) &&
             (identical(other.rewardId, rewardId) ||
                 other.rewardId == rewardId) &&
-            (identical(other.amount, amount) || other.amount == amount));
+            (identical(other.amount, amount) || other.amount == amount) &&
+            (identical(other.isEcoFriendly, isEcoFriendly) ||
+                other.isEcoFriendly == isEcoFriendly) &&
+            (identical(other.ecoPointsBonus, ecoPointsBonus) ||
+                other.ecoPointsBonus == ecoPointsBonus) &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl) &&
+            (identical(other.image250Url, image250Url) ||
+                other.image250Url == image250Url));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -268,11 +336,15 @@ class _TransactionsModel implements TransactionsModel {
       description,
       orderId,
       rewardId,
-      amount);
+      amount,
+      isEcoFriendly,
+      ecoPointsBonus,
+      imageUrl,
+      image250Url);
 
   @override
   String toString() {
-    return 'TransactionsModel(id: $id, userId: $userId, timeStamp: $timeStamp, pointsEarned: $pointsEarned, transactionType: $transactionType, title: $title, description: $description, orderId: $orderId, rewardId: $rewardId, amount: $amount)';
+    return 'TransactionsModel(id: $id, userId: $userId, timeStamp: $timeStamp, pointsEarned: $pointsEarned, transactionType: $transactionType, title: $title, description: $description, orderId: $orderId, rewardId: $rewardId, amount: $amount, isEcoFriendly: $isEcoFriendly, ecoPointsBonus: $ecoPointsBonus, imageUrl: $imageUrl, image250Url: $image250Url)';
   }
 }
 
@@ -294,7 +366,11 @@ abstract mixin class _$TransactionsModelCopyWith<$Res>
       String description,
       @JsonKey(name: 'order_id') String? orderId,
       @JsonKey(name: 'reward_id') String? rewardId,
-      double? amount});
+      double? amount,
+      @JsonKey(name: 'is_eco_friendly') bool isEcoFriendly,
+      @JsonKey(name: 'eco_points_bonus') int ecoPointsBonus,
+      @JsonKey(name: 'image_url') String? imageUrl,
+      @JsonKey(name: 'image_250_url') String? image250Url});
 }
 
 /// @nodoc
@@ -320,6 +396,10 @@ class __$TransactionsModelCopyWithImpl<$Res>
     Object? orderId = freezed,
     Object? rewardId = freezed,
     Object? amount = freezed,
+    Object? isEcoFriendly = null,
+    Object? ecoPointsBonus = null,
+    Object? imageUrl = freezed,
+    Object? image250Url = freezed,
   }) {
     return _then(_TransactionsModel(
       id: null == id
@@ -362,6 +442,22 @@ class __$TransactionsModelCopyWithImpl<$Res>
           ? _self.amount
           : amount // ignore: cast_nullable_to_non_nullable
               as double?,
+      isEcoFriendly: null == isEcoFriendly
+          ? _self.isEcoFriendly
+          : isEcoFriendly // ignore: cast_nullable_to_non_nullable
+              as bool,
+      ecoPointsBonus: null == ecoPointsBonus
+          ? _self.ecoPointsBonus
+          : ecoPointsBonus // ignore: cast_nullable_to_non_nullable
+              as int,
+      imageUrl: freezed == imageUrl
+          ? _self.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      image250Url: freezed == image250Url
+          ? _self.image250Url
+          : image250Url // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }

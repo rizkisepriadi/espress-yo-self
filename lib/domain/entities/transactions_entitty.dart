@@ -4,11 +4,15 @@ class TransactionsEntitty {
   final String timeStamp;
   final int pointsEarned;
   final String transactionType;
-  final String title; 
+  final String title;
   final String description;
-  final String? orderId; 
+  final String? orderId;
   final String? rewardId;
   final double? amount;
+  final bool isEcoFriendly;
+  final int ecoPointsBonus;
+  final String? imageUrl;
+  final String? image250Url;
 
   const TransactionsEntitty({
     required this.id,
@@ -21,5 +25,9 @@ class TransactionsEntitty {
     this.orderId,
     this.rewardId,
     this.amount,
+    this.isEcoFriendly = false,
+    this.ecoPointsBonus = 0,
+    this.imageUrl,
+    this.image250Url,
   });
 }
