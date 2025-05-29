@@ -19,7 +19,7 @@ mixin _$RewardModel {
   String get name;
   String get description;
   @JsonKey(name: 'points_required')
-  int get pointsRequired;
+  int? get pointsRequired;
   @JsonKey(name: 'is_active')
   bool get isActive;
   @JsonKey(name: 'image_url')
@@ -77,7 +77,7 @@ abstract mixin class $RewardModelCopyWith<$Res> {
       {String id,
       String name,
       String description,
-      @JsonKey(name: 'points_required') int pointsRequired,
+      @JsonKey(name: 'points_required') int? pointsRequired,
       @JsonKey(name: 'is_active') bool isActive,
       @JsonKey(name: 'image_url') String? imageUrl,
       @JsonKey(name: 'expiry_date') DateTime? expiryDate});
@@ -98,7 +98,7 @@ class _$RewardModelCopyWithImpl<$Res> implements $RewardModelCopyWith<$Res> {
     Object? id = null,
     Object? name = null,
     Object? description = null,
-    Object? pointsRequired = null,
+    Object? pointsRequired = freezed,
     Object? isActive = null,
     Object? imageUrl = freezed,
     Object? expiryDate = freezed,
@@ -116,10 +116,10 @@ class _$RewardModelCopyWithImpl<$Res> implements $RewardModelCopyWith<$Res> {
           ? _self.description
           : description // ignore: cast_nullable_to_non_nullable
               as String,
-      pointsRequired: null == pointsRequired
+      pointsRequired: freezed == pointsRequired
           ? _self.pointsRequired
           : pointsRequired // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       isActive: null == isActive
           ? _self.isActive
           : isActive // ignore: cast_nullable_to_non_nullable
@@ -143,7 +143,7 @@ class _RewardModel implements RewardModel {
       {required this.id,
       required this.name,
       required this.description,
-      @JsonKey(name: 'points_required') required this.pointsRequired,
+      @JsonKey(name: 'points_required') this.pointsRequired,
       @JsonKey(name: 'is_active') this.isActive = true,
       @JsonKey(name: 'image_url') this.imageUrl,
       @JsonKey(name: 'expiry_date') this.expiryDate});
@@ -158,7 +158,7 @@ class _RewardModel implements RewardModel {
   final String description;
   @override
   @JsonKey(name: 'points_required')
-  final int pointsRequired;
+  final int? pointsRequired;
   @override
   @JsonKey(name: 'is_active')
   final bool isActive;
@@ -226,7 +226,7 @@ abstract mixin class _$RewardModelCopyWith<$Res>
       {String id,
       String name,
       String description,
-      @JsonKey(name: 'points_required') int pointsRequired,
+      @JsonKey(name: 'points_required') int? pointsRequired,
       @JsonKey(name: 'is_active') bool isActive,
       @JsonKey(name: 'image_url') String? imageUrl,
       @JsonKey(name: 'expiry_date') DateTime? expiryDate});
@@ -247,7 +247,7 @@ class __$RewardModelCopyWithImpl<$Res> implements _$RewardModelCopyWith<$Res> {
     Object? id = null,
     Object? name = null,
     Object? description = null,
-    Object? pointsRequired = null,
+    Object? pointsRequired = freezed,
     Object? isActive = null,
     Object? imageUrl = freezed,
     Object? expiryDate = freezed,
@@ -265,10 +265,10 @@ class __$RewardModelCopyWithImpl<$Res> implements _$RewardModelCopyWith<$Res> {
           ? _self.description
           : description // ignore: cast_nullable_to_non_nullable
               as String,
-      pointsRequired: null == pointsRequired
+      pointsRequired: freezed == pointsRequired
           ? _self.pointsRequired
           : pointsRequired // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       isActive: null == isActive
           ? _self.isActive
           : isActive // ignore: cast_nullable_to_non_nullable

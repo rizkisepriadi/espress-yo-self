@@ -34,7 +34,6 @@ class RewardRepositoryImpl implements RewardRepository {
           .where('is_active', isEqualTo: true)
           .get();
       return querySnapshot.docs.map((doc) {
-        // Gunakan RewardModel untuk konsistensi (seperti getAllRewards)
         final model = RewardModel.fromJson({
           'id': doc.id,
           ...doc.data() as Map<String, dynamic>,
@@ -62,7 +61,6 @@ class RewardRepositoryImpl implements RewardRepository {
   Future<void> redeemReward(String userId, String rewardId, int pointsRequired) async {
     return await safeCall(() async {
       await FirebaseFirestore.instance.runTransaction((transaction) async {
-        // Get user document
         final userDoc = FirebaseFirestore.instance.collection('users').doc(userId);
         final userSnapshot = await transaction.get(userDoc);
         
@@ -75,7 +73,6 @@ class RewardRepositoryImpl implements RewardRepository {
           throw Exception('Not enough points');
         }
 
-        // Get reward details
         final rewardDoc = await transaction.get(_rewardsCollection.doc(rewardId));
         if (!rewardDoc.exists) {
           throw Exception('Reward not found');
@@ -86,22 +83,21 @@ class RewardRepositoryImpl implements RewardRepository {
           throw Exception('Reward is no longer active');
         }
 
-        // Update user points AND add to redeemedRewards for quick lookup
         final currentRedeemedRewards = List<String>.from(userSnapshot.data()?['redeemed_rewards'] ?? []);
         currentRedeemedRewards.add(rewardId);
         
         transaction.update(userDoc, {
           'total_points': FieldValue.increment(-pointsRequired),
-          'redeemed_rewards': currentRedeemedRewards, // Update quick lookup
+          'redeemed_rewards': currentRedeemedRewards, 
         });
 
-        // Create redemption using model
         final redemptionId = DateTime.now().millisecondsSinceEpoch.toString();
         final redemptionModel = UserRedemptionModel(
           id: redemptionId,
           userId: userId,
           rewardId: rewardId,
           rewardName: rewardData['name'],
+          rewardDescription: rewardData['description'] ?? '',
           pointsUsed: pointsRequired,
           redeemedAt: DateTime.now(),
           isUsed: false,
@@ -131,7 +127,7 @@ class RewardRepositoryImpl implements RewardRepository {
     }, label: 'getUserRedemptions');
   }
 
-  // Method untuk update redemption status (saat QR di-scan)
+  @override
   Future<void> markRedemptionAsUsed(String redemptionId, String staffId) async {
     return await safeCall(() async {
       await _redemptionsCollection.doc(redemptionId).update({

@@ -10,7 +10,7 @@ _RewardModel _$RewardModelFromJson(Map<String, dynamic> json) => _RewardModel(
       id: json['id'] as String,
       name: json['name'] as String,
       description: json['description'] as String,
-      pointsRequired: (json['points_required'] as num).toInt(),
+      pointsRequired: (json['points_required'] as num?)?.toInt(),
       isActive: json['is_active'] as bool? ?? true,
       imageUrl: json['image_url'] as String?,
       expiryDate: json['expiry_date'] == null

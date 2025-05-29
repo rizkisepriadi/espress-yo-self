@@ -10,7 +10,7 @@ abstract class RewardModel with _$RewardModel {
     required String id,
     required String name,
     required String description,
-    @JsonKey(name: 'points_required') required int pointsRequired,
+    @JsonKey(name: 'points_required') int? pointsRequired,
     @JsonKey(name: 'is_active') @Default(true) bool isActive,
     @JsonKey(name: 'image_url') String? imageUrl,
     @JsonKey(name: 'expiry_date') DateTime? expiryDate,
@@ -22,22 +22,22 @@ abstract class RewardModel with _$RewardModel {
 
 extension RewardModelMapper on RewardModel {
   RewardEntity toEntity() => RewardEntity(
-    id: id,
-    name: name,
-    description: description,
-    pointsRequired: pointsRequired,
-    isActive: isActive,
-    imageUrl: imageUrl,
-    expiryDate: expiryDate,
-  );
+        id: id,
+        name: name,
+        description: description,
+        pointsRequired: pointsRequired,
+        isActive: isActive,
+        imageUrl: imageUrl,
+        expiryDate: expiryDate,
+      );
 
   static RewardModel fromEntity(RewardEntity entity) => RewardModel(
-    id: entity.id,
-    name: entity.name,
-    description: entity.description,
-    pointsRequired: entity.pointsRequired,
-    isActive: entity.isActive,
-    imageUrl: entity.imageUrl,
-    expiryDate: entity.expiryDate,
-  );
+        id: entity.id,
+        name: entity.name,
+        description: entity.description,
+        pointsRequired: entity.pointsRequired,
+        isActive: entity.isActive,
+        imageUrl: entity.imageUrl,
+        expiryDate: entity.expiryDate,
+      );
 }
