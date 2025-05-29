@@ -3,6 +3,7 @@ class UserRedemptionEntity {
   final String userId;
   final String rewardId;
   final String rewardName;
+  final String rewardDescription;
   final int pointsUsed;
   final DateTime redeemedAt;
   final bool isUsed; 
@@ -15,6 +16,7 @@ class UserRedemptionEntity {
     required this.userId,
     required this.rewardId,
     required this.rewardName,
+    required this.rewardDescription,
     required this.pointsUsed,
     required this.redeemedAt,
     this.isUsed = false,

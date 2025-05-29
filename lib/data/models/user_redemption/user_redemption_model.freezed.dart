@@ -22,6 +22,8 @@ mixin _$UserRedemptionModel {
   String get rewardId;
   @JsonKey(name: 'reward_name')
   String get rewardName;
+  @JsonKey(name: 'reward_description')
+  String get rewardDescription;
   @JsonKey(name: 'points_used')
   int get pointsUsed;
   @JsonKey(name: 'redeemed_at')
@@ -57,6 +59,8 @@ mixin _$UserRedemptionModel {
                 other.rewardId == rewardId) &&
             (identical(other.rewardName, rewardName) ||
                 other.rewardName == rewardName) &&
+            (identical(other.rewardDescription, rewardDescription) ||
+                other.rewardDescription == rewardDescription) &&
             (identical(other.pointsUsed, pointsUsed) ||
                 other.pointsUsed == pointsUsed) &&
             (identical(other.redeemedAt, redeemedAt) ||
@@ -70,12 +74,23 @@ mixin _$UserRedemptionModel {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, userId, rewardId, rewardName,
-      pointsUsed, redeemedAt, isUsed, qrCode, usedAt, usedByStaff);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      userId,
+      rewardId,
+      rewardName,
+      rewardDescription,
+      pointsUsed,
+      redeemedAt,
+      isUsed,
+      qrCode,
+      usedAt,
+      usedByStaff);
 
   @override
   String toString() {
-    return 'UserRedemptionModel(id: $id, userId: $userId, rewardId: $rewardId, rewardName: $rewardName, pointsUsed: $pointsUsed, redeemedAt: $redeemedAt, isUsed: $isUsed, qrCode: $qrCode, usedAt: $usedAt, usedByStaff: $usedByStaff)';
+    return 'UserRedemptionModel(id: $id, userId: $userId, rewardId: $rewardId, rewardName: $rewardName, rewardDescription: $rewardDescription, pointsUsed: $pointsUsed, redeemedAt: $redeemedAt, isUsed: $isUsed, qrCode: $qrCode, usedAt: $usedAt, usedByStaff: $usedByStaff)';
   }
 }
 
@@ -90,6 +105,7 @@ abstract mixin class $UserRedemptionModelCopyWith<$Res> {
       @JsonKey(name: 'user_id') String userId,
       @JsonKey(name: 'reward_id') String rewardId,
       @JsonKey(name: 'reward_name') String rewardName,
+      @JsonKey(name: 'reward_description') String rewardDescription,
       @JsonKey(name: 'points_used') int pointsUsed,
       @JsonKey(name: 'redeemed_at') DateTime redeemedAt,
       @JsonKey(name: 'is_used') bool isUsed,
@@ -115,6 +131,7 @@ class _$UserRedemptionModelCopyWithImpl<$Res>
     Object? userId = null,
     Object? rewardId = null,
     Object? rewardName = null,
+    Object? rewardDescription = null,
     Object? pointsUsed = null,
     Object? redeemedAt = null,
     Object? isUsed = null,
@@ -138,6 +155,10 @@ class _$UserRedemptionModelCopyWithImpl<$Res>
       rewardName: null == rewardName
           ? _self.rewardName
           : rewardName // ignore: cast_nullable_to_non_nullable
+              as String,
+      rewardDescription: null == rewardDescription
+          ? _self.rewardDescription
+          : rewardDescription // ignore: cast_nullable_to_non_nullable
               as String,
       pointsUsed: null == pointsUsed
           ? _self.pointsUsed
@@ -175,6 +196,7 @@ class _UserRedemptionModel implements UserRedemptionModel {
       @JsonKey(name: 'user_id') required this.userId,
       @JsonKey(name: 'reward_id') required this.rewardId,
       @JsonKey(name: 'reward_name') required this.rewardName,
+      @JsonKey(name: 'reward_description') required this.rewardDescription,
       @JsonKey(name: 'points_used') required this.pointsUsed,
       @JsonKey(name: 'redeemed_at') required this.redeemedAt,
       @JsonKey(name: 'is_used') this.isUsed = false,
@@ -195,6 +217,9 @@ class _UserRedemptionModel implements UserRedemptionModel {
   @override
   @JsonKey(name: 'reward_name')
   final String rewardName;
+  @override
+  @JsonKey(name: 'reward_description')
+  final String rewardDescription;
   @override
   @JsonKey(name: 'points_used')
   final int pointsUsed;
@@ -241,6 +266,8 @@ class _UserRedemptionModel implements UserRedemptionModel {
                 other.rewardId == rewardId) &&
             (identical(other.rewardName, rewardName) ||
                 other.rewardName == rewardName) &&
+            (identical(other.rewardDescription, rewardDescription) ||
+                other.rewardDescription == rewardDescription) &&
             (identical(other.pointsUsed, pointsUsed) ||
                 other.pointsUsed == pointsUsed) &&
             (identical(other.redeemedAt, redeemedAt) ||
@@ -254,12 +281,23 @@ class _UserRedemptionModel implements UserRedemptionModel {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, userId, rewardId, rewardName,
-      pointsUsed, redeemedAt, isUsed, qrCode, usedAt, usedByStaff);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      userId,
+      rewardId,
+      rewardName,
+      rewardDescription,
+      pointsUsed,
+      redeemedAt,
+      isUsed,
+      qrCode,
+      usedAt,
+      usedByStaff);
 
   @override
   String toString() {
-    return 'UserRedemptionModel(id: $id, userId: $userId, rewardId: $rewardId, rewardName: $rewardName, pointsUsed: $pointsUsed, redeemedAt: $redeemedAt, isUsed: $isUsed, qrCode: $qrCode, usedAt: $usedAt, usedByStaff: $usedByStaff)';
+    return 'UserRedemptionModel(id: $id, userId: $userId, rewardId: $rewardId, rewardName: $rewardName, rewardDescription: $rewardDescription, pointsUsed: $pointsUsed, redeemedAt: $redeemedAt, isUsed: $isUsed, qrCode: $qrCode, usedAt: $usedAt, usedByStaff: $usedByStaff)';
   }
 }
 
@@ -276,6 +314,7 @@ abstract mixin class _$UserRedemptionModelCopyWith<$Res>
       @JsonKey(name: 'user_id') String userId,
       @JsonKey(name: 'reward_id') String rewardId,
       @JsonKey(name: 'reward_name') String rewardName,
+      @JsonKey(name: 'reward_description') String rewardDescription,
       @JsonKey(name: 'points_used') int pointsUsed,
       @JsonKey(name: 'redeemed_at') DateTime redeemedAt,
       @JsonKey(name: 'is_used') bool isUsed,
@@ -301,6 +340,7 @@ class __$UserRedemptionModelCopyWithImpl<$Res>
     Object? userId = null,
     Object? rewardId = null,
     Object? rewardName = null,
+    Object? rewardDescription = null,
     Object? pointsUsed = null,
     Object? redeemedAt = null,
     Object? isUsed = null,
@@ -324,6 +364,10 @@ class __$UserRedemptionModelCopyWithImpl<$Res>
       rewardName: null == rewardName
           ? _self.rewardName
           : rewardName // ignore: cast_nullable_to_non_nullable
+              as String,
+      rewardDescription: null == rewardDescription
+          ? _self.rewardDescription
+          : rewardDescription // ignore: cast_nullable_to_non_nullable
               as String,
       pointsUsed: null == pointsUsed
           ? _self.pointsUsed

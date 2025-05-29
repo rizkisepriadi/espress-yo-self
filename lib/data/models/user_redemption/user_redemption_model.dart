@@ -11,6 +11,7 @@ abstract class UserRedemptionModel with _$UserRedemptionModel {
     @JsonKey(name: 'user_id') required String userId,
     @JsonKey(name: 'reward_id') required String rewardId,
     @JsonKey(name: 'reward_name') required String rewardName,
+    @JsonKey(name: 'reward_description') required String rewardDescription,
     @JsonKey(name: 'points_used') required int pointsUsed,
     @JsonKey(name: 'redeemed_at') required DateTime redeemedAt,
     @JsonKey(name: 'is_used') @Default(false) bool isUsed,
@@ -25,24 +26,27 @@ abstract class UserRedemptionModel with _$UserRedemptionModel {
 
 extension UserRedemptionModelMapper on UserRedemptionModel {
   UserRedemptionEntity toEntity() => UserRedemptionEntity(
-    id: id,
-    userId: userId,
-    rewardId: rewardId,
-    rewardName: rewardName,
-    pointsUsed: pointsUsed,
-    redeemedAt: redeemedAt,
-    isUsed: isUsed,
-    qrCode: qrCode,
-  );
+        id: id,
+        userId: userId,
+        rewardId: rewardId,
+        rewardName: rewardName,
+        rewardDescription: rewardDescription,
+        pointsUsed: pointsUsed,
+        redeemedAt: redeemedAt,
+        isUsed: isUsed,
+        qrCode: qrCode,
+      );
 
-  static UserRedemptionModel fromEntity(UserRedemptionEntity entity) => UserRedemptionModel(
-    id: entity.id,
-    userId: entity.userId,
-    rewardId: entity.rewardId,
-    rewardName: entity.rewardName,
-    pointsUsed: entity.pointsUsed,
-    redeemedAt: entity.redeemedAt,
-    isUsed: entity.isUsed,
-    qrCode: entity.qrCode,
-  );
+  static UserRedemptionModel fromEntity(UserRedemptionEntity entity) =>
+      UserRedemptionModel(
+        id: entity.id,
+        userId: entity.userId,
+        rewardId: entity.rewardId,
+        rewardName: entity.rewardName,
+        rewardDescription: entity.rewardDescription,
+        pointsUsed: entity.pointsUsed,
+        redeemedAt: entity.redeemedAt,
+        isUsed: entity.isUsed,
+        qrCode: entity.qrCode,
+      );
 }
