@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
 class FloatingButton extends StatelessWidget {
   const FloatingButton({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,15 +25,17 @@ class FloatingButton extends StatelessWidget {
           ]),
       padding: EdgeInsets.all(12.w),
       child: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          context.push('/qr');
+        },
         elevation: 0,
         backgroundColor: colorScheme.onSurface,
+        shape: CircleBorder(),
         child: Icon(
           Icons.qr_code_scanner,
           size: 36.w,
           color: Colors.white,
         ),
-        shape: CircleBorder(),
       ),
     );
   }
