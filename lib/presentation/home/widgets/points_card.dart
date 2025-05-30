@@ -3,7 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class PointsCard extends StatefulWidget {
-  const PointsCard({super.key});
+  final int points;
+
+  const PointsCard({super.key, required this.points});
 
   @override
   State<PointsCard> createState() => _PointsCardState();
@@ -16,7 +18,7 @@ class _PointsCardState extends State<PointsCard> {
     final textTheme = Theme.of(context).textTheme;
 
     return GestureDetector(
-      onTap: () {}, 
+      onTap: () {},
       child: SizedBox(
           child: Column(
         children: [
@@ -39,7 +41,7 @@ class _PointsCardState extends State<PointsCard> {
                   ),
                 ),
                 Text(
-                  '80 pts',
+                  '${widget.points} pts',
                   style: textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w600,
                     color: colorScheme.onSecondary,
@@ -109,7 +111,7 @@ Widget _buildCoffeesStack(BuildContext context) {
             child: Container(
               height: 4.h,
               margin: EdgeInsets.symmetric(horizontal: 28.w),
-              color: Colors.white.withAlpha(100),
+              color: Colors.white.withAlpha(200),
             ),
           ),
         ),
