@@ -1,8 +1,6 @@
 import 'package:espress_yo_self/di/di.dart';
 import 'package:espress_yo_self/domain/entities/user_redemption_entity.dart';
-import 'package:espress_yo_self/presentation/common/bottom_navigation.dart';
 import 'package:espress_yo_self/presentation/common/coupon_card.dart';
-import 'package:espress_yo_self/presentation/common/floating_button.dart';
 import 'package:espress_yo_self/presentation/rewards/widgets/points_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -39,16 +37,6 @@ class _RewardsScreenState extends ConsumerState<RewardsScreen> {
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingButton(),
-      bottomNavigationBar: BottomNavigation(
-        currentIndex: selectedIndex,
-        onTap: (index) {
-          setState(() {
-            selectedIndex = index;
-          });
-        },
-      ),
       body: SafeArea(
         minimum: EdgeInsets.only(left: 16.w, right: 16.w, top: 8.h),
         child: SingleChildScrollView(

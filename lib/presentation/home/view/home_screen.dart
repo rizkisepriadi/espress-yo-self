@@ -1,22 +1,27 @@
-import 'package:espress_yo_self/presentation/common/bottom_navigation.dart';
-import 'package:espress_yo_self/presentation/common/floating_button.dart';
 import 'package:espress_yo_self/presentation/common/menu_box.dart';
 import 'package:espress_yo_self/presentation/home/widgets/points_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import '../../../di/di.dart';
-import '../../common/coupon_button.dart';
+import '../../common/coupon_card.dart';
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  int selectedIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
     final asyncUser = ref.watch(authViewModelProvider);
     final userState = ref.watch(getUserViewModelProvider);
+    final points = userState.asData?.value.totalPoints ?? 0;
     final userName = userState.asData?.value.name;
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
@@ -24,23 +29,6 @@ class HomeScreen extends ConsumerWidget {
     return Scaffold(
         resizeToAvoidBottomInset: true,
         appBar: _appbar(textTheme, asyncUser, userName, colorScheme),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: FloatingButton(),
-        bottomNavigationBar: BottomNavigation(
-            currentIndex: 0,
-            onTap: (index) {
-              // Handle bottom navigation tap
-              if (index == 0) {
-                // Already on home screen
-                return;
-              } else if (index == 1) {
-                // Navigate to another screen
-                context.go('/anotherScreen');
-              } else if (index == 2) {
-                // Navigate to yet another screen
-                context.go('/yetAnotherScreen');
-              }
-            }),
         body: SafeArea(
           minimum: EdgeInsets.only(left: 16.w, right: 16.w, top: 8.h),
           child: SingleChildScrollView(
@@ -49,7 +37,9 @@ class HomeScreen extends ConsumerWidget {
                   BoxConstraints(minHeight: MediaQuery.of(context).size.height),
               child: Column(
                 children: [
-                  PointsCard(),
+                  PointsCard(
+                    points: points,
+                  ),
                   SizedBox(height: 16.h),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 8.w),
@@ -72,7 +62,7 @@ class HomeScreen extends ConsumerWidget {
                       ],
                     ),
                   ),
-                  CouponButton(
+                  CouponCard(
                     title: "Get 20% OFF Your Coffee",
                     description:
                         "Today’s your lucky day! Enjoy a freshly brewed cup of your favorite coffee with an exclusive 20% OFF – only for today!",

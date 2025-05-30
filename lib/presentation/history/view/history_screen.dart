@@ -1,11 +1,8 @@
 import 'package:espress_yo_self/di/di.dart';
-import 'package:espress_yo_self/presentation/common/floating_button.dart';
 import 'package:espress_yo_self/presentation/history/widget/history_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../common/bottom_navigation.dart';
 
 class HistoryScreen extends ConsumerStatefulWidget {
   const HistoryScreen({super.key});
@@ -43,18 +40,9 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
         backgroundColor: colorScheme.surface,
         title: Text(
           'Purchase History',
-          style: textTheme.headlineMedium,
+          style: textTheme.headlineSmall,
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingButton(),
-      bottomNavigationBar: BottomNavigation(
-          currentIndex: selectedIndex,
-          onTap: (index) {
-            setState(() {
-              selectedIndex = index;
-            });
-          }),
       body: SafeArea(
           minimum: EdgeInsets.only(left: 16.w, right: 16.w),
           child: transactionState.when(
