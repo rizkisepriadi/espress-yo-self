@@ -7,11 +7,13 @@ class TransactionsViewmodel
   final GetUserTransactionsUsecase getUserTransactions;
   final AddTransactionUsecase addTransactionUsecase;
   final AddDetailedTransactionUsecase addDetailedTransactionUsecase;
+  final AddTransactionFromQRUsecase addTransactionFromQRUsecase;
 
   TransactionsViewmodel({
     required this.getUserTransactions,
     required this.addTransactionUsecase,
     required this.addDetailedTransactionUsecase,
+    required this.addTransactionFromQRUsecase,
   }) : super(const AsyncValue.loading());
 
   Future<void> fetchUserTransactions(String userId) async {
@@ -20,6 +22,23 @@ class TransactionsViewmodel
       final transactions = await getUserTransactions.call(userId);
       if (!mounted) return;
       state = AsyncValue.data(transactions);
+    } catch (e, stack) {
+      if (!mounted) return;
+      state = AsyncValue.error(e, stack);
+    }
+  }
+
+  Future<void> addTransactionFromQR({
+    required String userId,
+    required String qrData,
+  }) async {
+    try {
+      await addTransactionFromQRUsecase.call(
+        userId: userId,
+        qrData: qrData,
+      );
+      if (!mounted) return;
+      await fetchUserTransactions(userId);
     } catch (e, stack) {
       if (!mounted) return;
       state = AsyncValue.error(e, stack);
