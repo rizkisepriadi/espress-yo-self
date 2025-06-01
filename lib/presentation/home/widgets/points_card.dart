@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 class PointsCard extends StatefulWidget {
   final int points;
+  final int filledCups;
 
-  const PointsCard({super.key, required this.points});
+  const PointsCard({super.key, required this.points, required this.filledCups});
 
   @override
   State<PointsCard> createState() => _PointsCardState();
@@ -17,57 +19,59 @@ class _PointsCardState extends State<PointsCard> {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
-    return GestureDetector(
-      onTap: () {},
-      child: SizedBox(
+    return SizedBox(
+        child: Column(
+      children: [
+        Container(
+          padding: EdgeInsets.all(10.w),
+          decoration: BoxDecoration(
+            color: colorScheme.secondary,
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(16.r),
+                topRight: Radius.circular(16.r)),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Points",
+                style: textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: colorScheme.onSecondary,
+                ),
+              ),
+              Text(
+                '${widget.points} pts',
+                style: textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: colorScheme.onSecondary,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.all(10.w),
+          color: colorScheme.primary.withAlpha(204),
           child: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.all(10.w),
-            decoration: BoxDecoration(
-              color: colorScheme.secondary,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(16.r),
-                  topRight: Radius.circular(16.r)),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Points",
-                  style: textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: colorScheme.onSecondary,
-                  ),
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Coffees Stack",
+                style: textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: colorScheme.onPrimary,
                 ),
-                Text(
-                  '${widget.points} pts',
-                  style: textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: colorScheme.onSecondary,
-                  ),
-                ),
-              ],
-            ),
+              ),
+              _buildCoffeesStack(context, widget.filledCups),
+            ],
           ),
-          Container(
-            padding: EdgeInsets.all(10.w),
-            color: colorScheme.primary.withAlpha(204),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Coffees Stack",
-                  style: textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: colorScheme.onPrimary,
-                  ),
-                ),
-                _buildCoffeesStack(context),
-              ],
-            ),
-          ),
-          Container(
+        ),
+        GestureDetector(
+          onTap: () {
+            context.goNamed('Rewards');
+          },
+          child: Container(
             padding: EdgeInsets.all(10.w),
             decoration: BoxDecoration(
               color: colorScheme.secondary,
@@ -89,16 +93,16 @@ class _PointsCardState extends State<PointsCard> {
                 )
               ],
             ),
-          )
-        ],
-      )),
-    );
+          ),
+        )
+      ],
+    ));
   }
 }
 
-Widget _buildCoffeesStack(BuildContext context) {
+Widget _buildCoffeesStack(BuildContext context, int cups) {
   const int totalCups = 5;
-  const int filledCups = 3;
+  final int filledCups = cups;
 
   return Padding(
     padding: EdgeInsets.symmetric(vertical: 2.h),
