@@ -12,21 +12,6 @@ class HistoryScreen extends ConsumerStatefulWidget {
 }
 
 class _HistoryScreenState extends ConsumerState<HistoryScreen> {
-  int selectedIndex = 2;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final userState = ref.read(getUserViewModelProvider);
-      final userId = userState.asData?.value.id;
-      if (userId != null) {
-        ref
-            .read(transactionsViewModelProvider.notifier)
-            .fetchUserTransactions(userId);
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,15 +86,8 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                         SizedBox(height: 16.h),
                         ElevatedButton(
                             onPressed: () {
-                              final userState =
-                                  ref.read(getUserViewModelProvider);
-                              final userId = userState.asData?.value.id;
-                              if (userId != null) {
-                                ref
-                                    .read(
-                                        transactionsViewModelProvider.notifier)
-                                    .fetchUserTransactions(userId);
-                              }
+                              final _ =
+                                  ref.refresh(transactionsViewModelProvider);
                             },
                             child: Text('Retry')),
                       ],
