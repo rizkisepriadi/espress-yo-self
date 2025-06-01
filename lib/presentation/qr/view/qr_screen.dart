@@ -247,12 +247,9 @@ class _QrScreenState extends ConsumerState<QrScreen> with QrPermissionHandler {
         _showErrorDialog("User not logged in");
         return;
       }
-
       _showLoadingDialog();
 
-      await ref
-          .read(transactionsViewModelProvider.notifier)
-          .addTransactionFromQR(
+      await ref.read(transactionActionsProvider).addTransactionFromQR(
             userId: userId,
             qrData: qrData,
           );
