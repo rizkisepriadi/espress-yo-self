@@ -17,39 +17,23 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  int selectedIndex = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final userState = ref.read(getUserViewModelProvider);
-      final userId = userState.asData?.value.id;
-
-      if (userId != null) {
-        ref
-            .read(transactionsViewModelProvider.notifier)
-            .fetchUserTransactions(userId);
-        ref.read(rewardViewModelProvider.notifier).fetchUserRedemptions(userId);
-        ref
-            .read(stampProgressViewModelProvider.notifier)
-            .fetchStampProgress(userId);
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final asyncUser = ref.watch(authViewModelProvider);
-    final userState = ref.watch(getUserViewModelProvider);
-    final stampState = ref.watch(stampProgressViewModelProvider);
-    final rewardState = ref.watch(rewardViewModelProvider);
-    final historyState = ref.watch(transactionsViewModelProvider);
+    final userState = ref.watch(currentUserProvider);
+
+    final stampState = ref.watch(userStampProgressProvider);
+    final rewardState =
+        ref.watch(homeRewardsProvider);
+    final historyState =
+        ref.watch(homeTransactionsProvider);
+
     final points = userState.asData?.value.totalPoints ?? 0;
     final filledCups = stampState.asData?.value.stampsCollected ?? 0;
     final userName = userState.asData?.value.name;
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
+
 
     return Scaffold(
         resizeToAvoidBottomInset: true,
@@ -102,21 +86,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   size: 48.sp,
                                   color: colorScheme.error,
                                 ),
-                                SizedBox(
-                                  height: 8.h,
-                                ),
+                                SizedBox(height: 8.h),
                                 Text('Error: $error'),
                                 ElevatedButton(
                                     onPressed: () {
-                                      final userState =
-                                          ref.read(getUserViewModelProvider);
-                                      final userId = userState.asData?.value.id;
-                                      if (userId != null) {
-                                        ref
-                                            .read(rewardViewModelProvider
-                                                .notifier)
-                                            .fetchUserRedemptions(userId);
-                                      }
+                                      ref.invalidate(homeRewardsProvider);
                                     },
                                     child: Text('Retry')),
                               ],
@@ -140,23 +114,32 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             ),
                           );
                         }
+
+                        final userRedemptions =
+                            rewards.whereType<UserRedemptionEntity>().toList();
+
+                        if (userRedemptions.isEmpty) {
+                          return SizedBox(
+                            height: 100.h,
+                            child: Center(
+                                child: Text("No rewards available",
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge)),
+                          );
+                        }
+
                         return ListView.builder(
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
-                            itemCount: rewards.length > 2 ? 2 : rewards.length,
+                            itemCount: userRedemptions.length,
                             itemBuilder: (context, index) {
-                              final rewardData = rewards[index];
-
-                              if (rewardData is UserRedemptionEntity) {
-                                return CouponCard(
-                                  title: rewardData.rewardName,
-                                  description: rewardData.rewardDescription,
-                                  onPressed: () {
-                                    // Handle coupon button press
-                                  },
-                                );
-                              }
-                              return null;
+                              final rewardData = userRedemptions[index];
+                              return CouponCard(
+                                title: rewardData.rewardName,
+                                description: rewardData.rewardDescription,
+                                onPressed: () {
+                                },
+                              );
                             });
                       }),
                   SizedBox(height: 8.h),
@@ -193,21 +176,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             size: 48.sp,
                             color: colorScheme.error,
                           ),
-                          SizedBox(
-                            height: 8.h,
-                          ),
+                          SizedBox(height: 8.h),
                           Text('Error: $error'),
                           ElevatedButton(
                               onPressed: () {
-                                final userState =
-                                    ref.read(getUserViewModelProvider);
-                                final userId = userState.asData?.value.id;
-                                if (userId != null) {
-                                  ref
-                                      .read(transactionsViewModelProvider
-                                          .notifier)
-                                      .fetchUserTransactions(userId);
-                                }
+                                ref.invalidate(homeTransactionsProvider);
                               },
                               child: Text('Retry')),
                         ],
@@ -218,23 +191,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         return SizedBox(
                           height: 100.h,
                           child: Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'No transaction history.',
-                                  style: textTheme.bodyLarge,
-                                ),
-                              ],
-                            ),
-                          ),
+                              child: Text('No transaction history.',
+                                  style:
+                                      Theme.of(context).textTheme.bodyLarge)),
                         );
                       }
+
                       return ListView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount:
-                              transactions.length > 2 ? 2 : transactions.length,
+                          itemCount: transactions.length,
                           itemBuilder: (context, index) {
                             final transaction = transactions[index];
                             return Padding(
