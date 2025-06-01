@@ -19,7 +19,7 @@ class StampProgressRepositoryImpl implements StampProgressRepository {
         return StampProgressEntity(
           userId: userId,
           stampsCollected: 0,
-          stampsRequired: 10,
+          stampsRequired: 5,
           lastUpdated: DateTime.now(),
         );
       }
@@ -39,7 +39,7 @@ class StampProgressRepositoryImpl implements StampProgressRepository {
       await _firestore.collection(_collection).doc(userId).set({
         'user_id': userId,
         'stamps_collected': stamps,
-        'stamps_required': 10,
+        'stamps_required': 5,
         'last_updated': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
     }, label: 'updateStampProgress');
@@ -49,7 +49,7 @@ class StampProgressRepositoryImpl implements StampProgressRepository {
     await _firestore.collection(_collection).doc(userId).set({
       'user_id': userId,
       'stamps_collected': 0,
-      'stamps_required': 10,
+      'stamps_required': 5,
       'last_updated': FieldValue.serverTimestamp(),
     });
   }
