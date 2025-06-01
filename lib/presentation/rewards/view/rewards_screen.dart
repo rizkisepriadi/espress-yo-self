@@ -14,24 +14,13 @@ class RewardsScreen extends ConsumerStatefulWidget {
 }
 
 class _RewardsScreenState extends ConsumerState<RewardsScreen> {
-  int selectedIndex = 1;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final userState = ref.read(getUserViewModelProvider);
-      final userId = userState.asData?.value.id;
-      if (userId != null) {
-        ref.read(rewardViewModelProvider.notifier).fetchUserRedemptions(userId);
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     final userState = ref.watch(getUserViewModelProvider);
     final rewardState = ref.watch(rewardViewModelProvider);
+    final stampState = ref.watch(stampProgressViewModelProvider);
+    final filledCups = stampState.asData?.value.stampsCollected ?? 0;
     final points = userState.asData?.value.totalPoints ?? 0;
     final textTheme = Theme.of(context).textTheme;
 
@@ -46,7 +35,10 @@ class _RewardsScreenState extends ConsumerState<RewardsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    PointsCard(points: points),
+                    PointsCard(
+                      points: points,
+                      filledCups: filledCups,
+                    ),
                     SizedBox(height: 16.h),
                     Text("Your Rewards", style: textTheme.headlineSmall),
                     SizedBox(height: 24.h),
@@ -78,13 +70,7 @@ class _RewardsScreenState extends ConsumerState<RewardsScreen> {
                   Text('Error: $error'),
                   ElevatedButton(
                       onPressed: () {
-                        final userState = ref.read(getUserViewModelProvider);
-                        final userId = userState.asData?.value.id;
-                        if (userId != null) {
-                          ref
-                              .read(rewardViewModelProvider.notifier)
-                              .fetchUserRedemptions(userId);
-                        }
+                        final _ = ref.refresh(rewardViewModelProvider);
                       },
                       child: Text('Retry')),
                 ],
