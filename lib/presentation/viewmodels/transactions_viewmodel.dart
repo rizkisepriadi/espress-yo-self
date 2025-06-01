@@ -17,14 +17,13 @@ class TransactionsViewmodel
   }) : super(const AsyncValue.loading());
 
   Future<void> fetchUserTransactions(String userId) async {
+    state = const AsyncValue.loading();
+
     try {
-      state = const AsyncValue.loading();
-      final transactions = await getUserTransactions.call(userId);
-      if (!mounted) return;
-      state = AsyncValue.data(transactions);
-    } catch (e, stack) {
-      if (!mounted) return;
-      state = AsyncValue.error(e, stack);
+      final result = await getUserTransactions.call(userId);
+      state = AsyncValue.data(result);
+    } catch (error, stackTrace) {
+      state = AsyncValue.error(error, stackTrace);
     }
   }
 

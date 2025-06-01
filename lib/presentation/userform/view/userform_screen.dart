@@ -20,12 +20,10 @@ class NameformScreenState extends ConsumerState<UserformScreen> {
   final userId = FirebaseAuth.instance.currentUser?.uid;
   bool _isLoading = false;
 
-  // Add a cancellation token
   bool _cancelled = false;
 
   @override
   void dispose() {
-    // Mark as cancelled when disposed
     _cancelled = true;
     _nameController.dispose();
     super.dispose();
@@ -43,43 +41,35 @@ class NameformScreenState extends ConsumerState<UserformScreen> {
     }
 
     try {
-      // Show loading indicator
       if (!_cancelled && mounted) {
         setState(() {
           _isLoading = true;
         });
       }
 
-      // First update Firestore through UserViewModel
-      await ref
-          .read(getUserViewModelProvider.notifier)
-          .updateUserProfile(userId!, name);
+      final userActions = ref.read(userActionsProvider);
+      await userActions.updateUserProfile(userId!, name);
       debugPrint("User profile updated through proper architecture");
 
-      // Check cancellation
       if (_cancelled) return;
 
-      // Then update Firebase Auth
       await ref
           .read(authViewModelProvider.notifier)
           .updateUserProfile(name, null);
-      debugPrint("Auth profile updated through proper architecture");
+      debugPrint(
+          "Auth profile updated through proper architecture");
+      final _ = ref.refresh(authViewModelProvider);
 
-      // Force refresh of auth state to ensure router sees the correct state
-      ref.refresh(authViewModelProvider);
+      ref.refresh(currentUserProvider);
 
-      // IMPORTANT: Use a longer delay to ensure state propagation
       await Future.delayed(const Duration(seconds: 2));
 
-      // Check cancellation before continuing
       if (_cancelled) return;
 
-      // Navigate with special parameter to bypass redirect
       if (mounted && context.mounted) {
         context.go('/home?fromProfile=true');
       }
     } catch (e) {
-      // Only try to update state if not cancelled
       if (!_cancelled && mounted) {
         setState(() {
           _isLoading = false;
