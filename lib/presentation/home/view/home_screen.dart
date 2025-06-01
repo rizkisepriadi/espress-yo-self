@@ -1,9 +1,11 @@
+import 'package:espress_yo_self/domain/entities/user_redemption_entity.dart';
 import 'package:espress_yo_self/presentation/common/menu_box.dart';
 import 'package:espress_yo_self/presentation/home/widgets/points_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import '../../../di/di.dart';
 import '../../common/coupon_card.dart';
 
@@ -18,10 +20,33 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   int selectedIndex = 0;
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final userState = ref.read(getUserViewModelProvider);
+      final userId = userState.asData?.value.id;
+
+      if (userId != null) {
+        ref
+            .read(transactionsViewModelProvider.notifier)
+            .fetchUserTransactions(userId);
+        ref.read(rewardViewModelProvider.notifier).fetchUserRedemptions(userId);
+        ref
+            .read(stampProgressViewModelProvider.notifier)
+            .fetchStampProgress(userId);
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final asyncUser = ref.watch(authViewModelProvider);
     final userState = ref.watch(getUserViewModelProvider);
+    final stampState = ref.watch(stampProgressViewModelProvider);
+    final rewardState = ref.watch(rewardViewModelProvider);
+    final historyState = ref.watch(transactionsViewModelProvider);
     final points = userState.asData?.value.totalPoints ?? 0;
+    final filledCups = stampState.asData?.value.stampsCollected ?? 0;
     final userName = userState.asData?.value.name;
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
@@ -39,6 +64,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 children: [
                   PointsCard(
                     points: points,
+                    filledCups: filledCups,
                   ),
                   SizedBox(height: 16.h),
                   Padding(
@@ -56,20 +82,83 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             size: 30.sp,
                           ),
                           onPressed: () {
-                            // Navigate to rewards screen
+                            context.goNamed('Rewards');
                           },
                         ),
                       ],
                     ),
                   ),
-                  CouponCard(
-                    title: "Get 20% OFF Your Coffee",
-                    description:
-                        "Today’s your lucky day! Enjoy a freshly brewed cup of your favorite coffee with an exclusive 20% OFF – only for today!",
-                    onPressed: () {
-                      // Handle coupon button press
-                    },
-                  ),
+                  rewardState.when(
+                      loading: () {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      },
+                      error: (error, stack) => Center(
+                            child: Column(
+                              children: [
+                                Icon(
+                                  Icons.error,
+                                  size: 48.sp,
+                                  color: colorScheme.error,
+                                ),
+                                SizedBox(
+                                  height: 8.h,
+                                ),
+                                Text('Error: $error'),
+                                ElevatedButton(
+                                    onPressed: () {
+                                      final userState =
+                                          ref.read(getUserViewModelProvider);
+                                      final userId = userState.asData?.value.id;
+                                      if (userId != null) {
+                                        ref
+                                            .read(rewardViewModelProvider
+                                                .notifier)
+                                            .fetchUserRedemptions(userId);
+                                      }
+                                    },
+                                    child: Text('Retry')),
+                              ],
+                            ),
+                          ),
+                      data: (rewards) {
+                        if (rewards.isEmpty) {
+                          return SizedBox(
+                            height: 100.h,
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(height: 8.h),
+                                  Text("No rewards available",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge),
+                                ],
+                              ),
+                            ),
+                          );
+                        }
+                        return ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: rewards.length > 2 ? 2 : rewards.length,
+                            itemBuilder: (context, index) {
+                              final rewardData = rewards[index];
+
+                              if (rewardData is UserRedemptionEntity) {
+                                return CouponCard(
+                                  title: rewardData.rewardName,
+                                  description: rewardData.rewardDescription,
+                                  onPressed: () {
+                                    // Handle coupon button press
+                                  },
+                                );
+                              }
+                              return null;
+                            });
+                      }),
                   SizedBox(height: 8.h),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 8.w),
@@ -86,24 +175,77 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             size: 30.sp,
                           ),
                           onPressed: () {
-                            // Navigate to Purchase History screen
+                            context.goNamed('History');
                           },
                         ),
                       ],
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      MenuBox(
-                        title: "Ice Coffee",
-                        points: 10,
+                  historyState.when(
+                    loading: () => Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    error: (error, stack) => Center(
+                      child: Column(
+                        children: [
+                          Icon(
+                            Icons.error,
+                            size: 48.sp,
+                            color: colorScheme.error,
+                          ),
+                          SizedBox(
+                            height: 8.h,
+                          ),
+                          Text('Error: $error'),
+                          ElevatedButton(
+                              onPressed: () {
+                                final userState =
+                                    ref.read(getUserViewModelProvider);
+                                final userId = userState.asData?.value.id;
+                                if (userId != null) {
+                                  ref
+                                      .read(transactionsViewModelProvider
+                                          .notifier)
+                                      .fetchUserTransactions(userId);
+                                }
+                              },
+                              child: Text('Retry')),
+                        ],
                       ),
-                      MenuBox(
-                        title: "Ice Coffee",
-                        points: 10,
-                      ),
-                    ],
+                    ),
+                    data: (transactions) {
+                      if (transactions.isEmpty) {
+                        return SizedBox(
+                          height: 100.h,
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'No transaction history.',
+                                  style: textTheme.bodyLarge,
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }
+                      return ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount:
+                              transactions.length > 2 ? 2 : transactions.length,
+                          itemBuilder: (context, index) {
+                            final transaction = transactions[index];
+                            return Padding(
+                              padding: EdgeInsets.only(bottom: 12.h, top: 4.h),
+                              child: MenuBox(
+                                  title: transaction.title,
+                                  points: transaction.pointsEarned,
+                                  image: transaction.image250Url ?? ''),
+                            );
+                          });
+                    },
                   ),
                 ],
               ),
