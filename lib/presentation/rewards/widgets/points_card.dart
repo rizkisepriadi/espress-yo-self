@@ -1,3 +1,5 @@
+import 'package:espress_yo_self/presentation/rewards/widgets/points_details_modal.dart';
+import 'package:espress_yo_self/presentation/rewards/widgets/redeem_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -78,7 +80,7 @@ class _PointsCardState extends State<PointsCard> {
             SizedBox(
               width: 180.w,
               child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () => _showDetailModal(context),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: colorScheme.primary,
                     foregroundColor: colorScheme.onPrimary,
@@ -91,7 +93,7 @@ class _PointsCardState extends State<PointsCard> {
             SizedBox(
               width: 180.w,
               child: OutlinedButton(
-                  onPressed: () {},
+                  onPressed: () => _showRedeemDialog(context),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: colorScheme.primary,
                     shape: RoundedRectangleBorder(
@@ -104,6 +106,31 @@ class _PointsCardState extends State<PointsCard> {
         ),
       ],
     ));
+  }
+
+  void _showDetailModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      useSafeArea: true,
+      builder: (context) => PointsDetailsModal(
+        points: widget.points,
+        filledCups: widget.filledCups,
+      ),
+    );
+  }
+
+  void _showRedeemDialog(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        useSafeArea: true,
+        builder: (context) => RedeemModal(
+              points: widget.points,
+              filledCups: widget.filledCups,
+            ));
   }
 }
 
