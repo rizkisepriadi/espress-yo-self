@@ -30,16 +30,18 @@ class RewardRepositoryImpl implements RewardRepository {
   @override
   Future<List<RewardEntity>> getActiveRewards() async {
     return await safeCall(() async {
-      final querySnapshot = await _rewardsCollection
-          .where('is_active', isEqualTo: true)
-          .get();
-      return querySnapshot.docs.map((doc) {
+      final querySnapshot =
+          await _rewardsCollection.where('is_active', isEqualTo: true).get();
+
+      final rewards = querySnapshot.docs.map((doc) {
         final model = RewardModel.fromJson({
           'id': doc.id,
           ...doc.data() as Map<String, dynamic>,
         });
         return model.toEntity();
       }).toList();
+
+      return rewards;
     }, label: 'getActiveRewards');
   }
 
@@ -58,12 +60,14 @@ class RewardRepositoryImpl implements RewardRepository {
   }
 
   @override
-  Future<void> redeemReward(String userId, String rewardId, int pointsRequired) async {
+  Future<void> redeemReward(
+      String userId, String rewardId, int pointsRequired) async {
     return await safeCall(() async {
       await FirebaseFirestore.instance.runTransaction((transaction) async {
-        final userDoc = FirebaseFirestore.instance.collection('users').doc(userId);
+        final userDoc =
+            FirebaseFirestore.instance.collection('users').doc(userId);
         final userSnapshot = await transaction.get(userDoc);
-        
+
         if (!userSnapshot.exists) {
           throw Exception('User not found');
         }
@@ -73,7 +77,8 @@ class RewardRepositoryImpl implements RewardRepository {
           throw Exception('Not enough points');
         }
 
-        final rewardDoc = await transaction.get(_rewardsCollection.doc(rewardId));
+        final rewardDoc =
+            await transaction.get(_rewardsCollection.doc(rewardId));
         if (!rewardDoc.exists) {
           throw Exception('Reward not found');
         }
@@ -83,12 +88,13 @@ class RewardRepositoryImpl implements RewardRepository {
           throw Exception('Reward is no longer active');
         }
 
-        final currentRedeemedRewards = List<String>.from(userSnapshot.data()?['redeemed_rewards'] ?? []);
+        final currentRedeemedRewards =
+            List<String>.from(userSnapshot.data()?['redeemed_rewards'] ?? []);
         currentRedeemedRewards.add(rewardId);
-        
+
         transaction.update(userDoc, {
           'total_points': FieldValue.increment(-pointsRequired),
-          'redeemed_rewards': currentRedeemedRewards, 
+          'redeemed_rewards': currentRedeemedRewards,
         });
 
         final redemptionId = DateTime.now().millisecondsSinceEpoch.toString();
@@ -105,7 +111,7 @@ class RewardRepositoryImpl implements RewardRepository {
         );
 
         transaction.set(
-          _redemptionsCollection.doc(redemptionId), 
+          _redemptionsCollection.doc(redemptionId),
           redemptionModel.toJson(),
         );
       });
@@ -121,7 +127,8 @@ class RewardRepositoryImpl implements RewardRepository {
           .get();
 
       return querySnapshot.docs.map((doc) {
-        final model = UserRedemptionModel.fromJson(doc.data() as Map<String, dynamic>);
+        final model =
+            UserRedemptionModel.fromJson(doc.data() as Map<String, dynamic>);
         return model.toEntity();
       }).toList();
     }, label: 'getUserRedemptions');
@@ -137,7 +144,7 @@ class RewardRepositoryImpl implements RewardRepository {
       });
     }, label: 'markRedemptionAsUsed');
   }
-  
+
   @override
   Future<bool> hasUserRedeemedReward(String userId, String rewardId) async {
     return await safeCall(() async {
@@ -145,10 +152,11 @@ class RewardRepositoryImpl implements RewardRepository {
           .collection('users')
           .doc(userId)
           .get();
-      
+
       if (!userDoc.exists) return false;
-      
-      final redeemedRewards = List<String>.from(userDoc.data()?['redeemed_rewards'] ?? []);
+
+      final redeemedRewards =
+          List<String>.from(userDoc.data()?['redeemed_rewards'] ?? []);
       return redeemedRewards.contains(rewardId);
     }, label: 'hasUserRedeemedReward');
   }
