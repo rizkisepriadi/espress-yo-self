@@ -11,6 +11,7 @@ _UserModel _$UserModelFromJson(Map<String, dynamic> json) => _UserModel(
       name: json['name'] as String,
       email: json['email'] as String,
       totalPoints: (json['total_points'] as num).toInt(),
+      profileImageUrl: json['profile_image_url'] as String?,
       redeemedRewards: (json['redeemed_rewards'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
@@ -22,5 +23,6 @@ Map<String, dynamic> _$UserModelToJson(_UserModel instance) =>
       'name': instance.name,
       'email': instance.email,
       'total_points': instance.totalPoints,
+      'profile_image_url': instance.profileImageUrl,
       'redeemed_rewards': instance.redeemedRewards,
     };

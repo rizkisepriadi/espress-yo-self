@@ -3,6 +3,7 @@ class UserEntity {
   final String name;
   final String email;
   final int totalPoints;
+  final String? profileImageUrl;
   final List<String> redeemedRewards;
 
   const UserEntity({
@@ -11,5 +12,6 @@ class UserEntity {
     required this.email,
     required this.totalPoints,
     required this.redeemedRewards,
+    this.profileImageUrl,
   });
 }

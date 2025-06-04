@@ -11,6 +11,7 @@ abstract class UserModel with _$UserModel {
       required String name,
       required String email,
       @JsonKey(name: 'total_points') required int totalPoints,
+      @JsonKey(name: 'profile_image_url') required String? profileImageUrl,
       @JsonKey(name: 'redeemed_rewards')
       required List<String> redeemedRewards}) = _UserModel;
 
@@ -24,12 +25,15 @@ extension UserModelMapper on UserModel {
       name: name,
       email: email,
       totalPoints: totalPoints,
-      redeemedRewards: redeemedRewards);
+      redeemedRewards: redeemedRewards,
+      profileImageUrl: profileImageUrl);
 
   static UserModel fromEntity(UserEntity entity) => UserModel(
-      id: entity.id,
-      name: entity.name,
-      email: entity.email,
-      totalPoints: entity.totalPoints,
-      redeemedRewards: entity.redeemedRewards);
+        id: entity.id,
+        name: entity.name,
+        email: entity.email,
+        totalPoints: entity.totalPoints,
+        redeemedRewards: entity.redeemedRewards,
+        profileImageUrl: entity.profileImageUrl,
+      );
 }
