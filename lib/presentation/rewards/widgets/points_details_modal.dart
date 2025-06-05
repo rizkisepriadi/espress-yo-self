@@ -19,7 +19,7 @@ class PointsDetailsModal extends ConsumerWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return Container(
-      height: MediaQuery.of(context).size.height * 0.8,
+      height: MediaQuery.of(context).size.height * 1.0,
       decoration: BoxDecoration(
         color: colorScheme.surface,
         borderRadius: BorderRadius.only(
