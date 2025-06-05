@@ -23,17 +23,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final userState = ref.watch(currentUserProvider);
 
     final stampState = ref.watch(userStampProgressProvider);
-    final rewardState =
-        ref.watch(homeRewardsProvider);
-    final historyState =
-        ref.watch(homeTransactionsProvider);
+    final rewardState = ref.watch(homeRewardsProvider);
+    final historyState = ref.watch(homeTransactionsProvider);
 
     final points = userState.asData?.value.totalPoints ?? 0;
     final filledCups = stampState.asData?.value.stampsCollected ?? 0;
     final userName = userState.asData?.value.name;
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
-
 
     return Scaffold(
         resizeToAvoidBottomInset: true,
@@ -134,11 +131,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             itemCount: userRedemptions.length,
                             itemBuilder: (context, index) {
                               final rewardData = userRedemptions[index];
-                              return CouponCard(
-                                title: rewardData.rewardName,
-                                description: rewardData.rewardDescription,
-                                onPressed: () {
-                                },
+                              return Padding(
+                                padding: EdgeInsets.only(top: 8.h),
+                                child: CouponCard(
+                                  title: rewardData.rewardName,
+                                  description: rewardData.rewardDescription,
+                                  onPressed: () {},
+                                ),
                               );
                             });
                       }),
