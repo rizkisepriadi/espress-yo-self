@@ -14,7 +14,6 @@ class RewardsScreen extends ConsumerStatefulWidget {
 }
 
 class _RewardsScreenState extends ConsumerState<RewardsScreen> {
-
   @override
   Widget build(BuildContext context) {
     final userState = ref.watch(getUserViewModelProvider);
@@ -106,10 +105,13 @@ class _RewardsScreenState extends ConsumerState<RewardsScreen> {
                 final rewardData = rewards[index];
 
                 if (rewardData is UserRedemptionEntity) {
-                  return CouponCard(
-                    title: rewardData.rewardName,
-                    description: rewardData.rewardDescription,
-                    onPressed: () {},
+                  return Padding(
+                    padding: EdgeInsets.only(bottom: 8.h),
+                    child: CouponCard(
+                      title: rewardData.rewardName,
+                      description: rewardData.rewardDescription,
+                      onPressed: () {},
+                    ),
                   );
                 } else {
                   return Card(
