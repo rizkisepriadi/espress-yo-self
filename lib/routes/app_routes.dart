@@ -1,5 +1,6 @@
 import 'package:espress_yo_self/di/di.dart';
 import 'package:espress_yo_self/presentation/history/view/history_screen.dart';
+import 'package:espress_yo_self/presentation/profile/view/edit_profile_screen.dart';
 import 'package:espress_yo_self/presentation/profile/view/profile_screen.dart';
 import 'package:espress_yo_self/presentation/rewards/view/rewards_screen.dart';
 import 'package:espress_yo_self/presentation/main/main_shell_screen.dart';
@@ -58,13 +59,20 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => UserformScreen(),
         name: 'UserForm',
       ),
-                GoRoute(
-            path: '/qr', 
-            pageBuilder: (context, state) => NoTransitionPage(
-              child: const QrScreen(),
-            ),
-            name: 'QR',
-          ),
+      GoRoute(
+        path: '/qr',
+        pageBuilder: (context, state) => NoTransitionPage(
+          child: const QrScreen(),
+        ),
+        name: 'QR',
+      ),
+      GoRoute(
+        path: '/edit-profile',
+        pageBuilder: (context, state) => NoTransitionPage(
+          child: const EditProfileScreen(),
+        ),
+        name: 'EditProfile',
+      ),
       ShellRoute(
         builder: (context, state, child) => MainShellScreen(child: child),
         routes: [
