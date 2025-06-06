@@ -57,4 +57,15 @@ class AuthService {
     await _auth.signOut();
     await _googleSignIn.signOut();
   }
+
+  Future<User> updatePassword(String newPassword) async {
+    final user = _auth.currentUser;
+    if (user == null) {
+      throw Exception('No user is currently signed in');
+    }
+
+    await user.updatePassword(newPassword);
+    await user.reload();
+    return _auth.currentUser!;
+  }
 }
