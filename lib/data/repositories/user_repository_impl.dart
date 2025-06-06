@@ -1,16 +1,24 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:espress_yo_self/data/services/auth_service.dart';
+import 'package:espress_yo_self/data/services/supabase_storage_service.dart';
 import 'package:espress_yo_self/domain/entities/user_entity.dart';
 import 'package:espress_yo_self/domain/repositories/user_repository.dart';
 import 'package:espress_yo_self/utils/safe_call.dart';
+import 'package:flutter/material.dart';
 
 import '../models/user/user_model.dart';
 
 class UserRepositoryImpl implements UserRepository {
   final FirebaseFirestore firestore;
   final AuthService authService;
+  final SupabaseStorageService storageService;
 
-  UserRepositoryImpl({required this.firestore, required this.authService});
+  UserRepositoryImpl({
+    required this.firestore,
+    required this.authService,
+    required this.storageService,
+  });
 
   @override
   Future<UserEntity> getCurrentUser() async {
@@ -48,23 +56,54 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<void> updateUserProfile(String userId, String name) async {
+  Future<void> updateUserProfile(String userId, String name,
+      {File? profileImage}) async {
     return safeCall(() async {
       final userDocRef = firestore.collection('users').doc(userId);
-
       final docSnapshot = await userDocRef.get();
+
+      String? profileImageUrl;
+
+      if (profileImage != null) {
+        if (docSnapshot.exists) {
+          final oldImageUrl =
+              docSnapshot.data()?['profile_image_url'] as String?;
+          if (oldImageUrl != null && oldImageUrl.isNotEmpty) {
+            try {
+              await storageService.deleteProfileImage(oldImageUrl);
+            } catch (e) {
+              debugPrint('Failed to delete old profile image: $e');
+            }
+          }
+        }
+
+        profileImageUrl =
+            await storageService.uploadProfileImage(userId, profileImage);
+
+        await authService.updateUserProfile(name, profileImageUrl);
+      } else {
+        await authService.updateUserProfile(name, null);
+      }
 
       if (!docSnapshot.exists) {
         await userDocRef.set({
           'id': userId,
           'name': name,
           'email': authService.currentUser?.email ?? '',
+          'profile_image_url':
+              profileImageUrl ?? authService.currentUser?.photoURL ?? '',
           'total_points': 0,
           'redeemed_rewards': []
         });
       } else {
-        await userDocRef.update({'name': name});
+        final updateData = <String, dynamic>{'name': name};
+        if (profileImageUrl != null) {
+          updateData['profile_image_url'] = profileImageUrl;
+        }
+        await userDocRef.update(updateData);
       }
     }, label: 'updateUserProfile');
   }
+
+  
 }
