@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:espress_yo_self/domain/entities/user_entity.dart';
 import 'package:espress_yo_self/domain/repositories/user_repository.dart';
 
@@ -20,6 +21,7 @@ class UpdateUserPointsUsecase {
     return await repository.updateUserPoints(userId, points);
   }
 }
+
 class UpdateStampProgressUsecase {
   final UserRepository repository;
 
@@ -35,8 +37,9 @@ class UpdateUserProfileUsecase {
 
   UpdateUserProfileUsecase(this.repository);
 
-  Future<void> call(String userId, String displayName) async {
-    print("Calling UpdateUserProfileUsecase with $userId, $displayName");
-    await repository.updateUserProfile(userId, displayName);
+  Future<void> call(String userId, String displayName,
+      {File? profileImage}) async {
+    await repository.updateUserProfile(userId, displayName,
+        profileImage: profileImage);
   }
 }
