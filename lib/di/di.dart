@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:espress_yo_self/domain/entities/reward_entity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Core Services
 import 'package:espress_yo_self/data/services/auth_service.dart';
+import 'package:espress_yo_self/data/services/supabase_storage_service.dart';
 
 // Repositories
 import 'package:espress_yo_self/data/repositories/user_repository_impl.dart';
@@ -29,6 +32,8 @@ import 'package:espress_yo_self/presentation/viewmodels/auth_viewmodel.dart';
 final firebaseFirestoreProvider =
     Provider<FirebaseFirestore>((ref) => FirebaseFirestore.instance);
 final authServiceProvider = Provider<AuthService>((ref) => AuthService());
+final supabaseStorageServiceProvider =
+    Provider<SupabaseStorageService>((ref) => SupabaseStorageService());
 
 // ==================== REPOSITORIES ====================
 
@@ -36,6 +41,7 @@ final userRepositoryProvider = Provider<UserRepository>((ref) {
   return UserRepositoryImpl(
     firestore: ref.watch(firebaseFirestoreProvider),
     authService: ref.watch(authServiceProvider),
+    storageService: ref.watch(supabaseStorageServiceProvider),
   );
 });
 
@@ -108,9 +114,16 @@ final userStampProgressProvider =
 
 // Active rewards for shop
 final activeRewardsProvider =
-    FutureProvider.autoDispose<List<dynamic>>((ref) async {
-  final repository = ref.watch(rewardRepositoryProvider);
-  return await repository.getActiveRewards();
+    FutureProvider.autoDispose<List<RewardEntity>>((ref) async {
+  try {
+    final repository = ref.watch(rewardRepositoryProvider);
+    final result = await repository.getActiveRewards();
+
+    return result;
+  } catch (e) {
+    debugPrint('Error in activeRewardsProvider: $e');
+    rethrow;
+  }
 });
 
 // ==================== HOME SCREEN OPTIMIZED DATA ====================
