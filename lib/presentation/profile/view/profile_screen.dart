@@ -1,8 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:espress_yo_self/presentation/profile/widget/setting_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../di/di.dart';
 
@@ -25,13 +27,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     final userState = ref.watch(getUserViewModelProvider);
     final userName = userState.asData?.value.name;
     final userEmail = userState.asData?.value.email;
+    final photoUrl = userState.asData?.value.profileImageUrl;
 
     return SafeArea(
         child: Center(
       child: Column(
         children: [
-          SvgPicture.asset("assets/svgs/profile_default.svg",
-              width: 160.w, height: 160.h),
+          _buildProfileAvatar(photoUrl, colorScheme),
           SizedBox(height: 8.h),
           Text(
             userName!,
@@ -48,7 +50,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           SizedBox(
             width: 150.w,
             child: OutlinedButton(
-              onPressed: () {},
+              onPressed: () {
+                context.push('/edit-profile');
+              },
               style: OutlinedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.r),
@@ -106,5 +110,41 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         ],
       ),
     ));
+  }
+
+  Widget _buildProfileAvatar(String? photoUrl, ColorScheme colorScheme) {
+    return CircleAvatar(
+      radius: 60.r,
+      backgroundColor: Colors.grey.shade100,
+      child: photoUrl != null && photoUrl.isNotEmpty
+          ? ClipOval(
+              child: CachedNetworkImage(
+                imageUrl: photoUrl,
+                width: 116.w,
+                height: 116.h,
+                fit: BoxFit.cover,
+                placeholder: (context, url) => Center(
+                  child: SizedBox(
+                    width: 20.w,
+                    height: 20.h,
+                    child: const CircularProgressIndicator(strokeWidth: 2),
+                  ),
+                ),
+                errorWidget: (context, url, error) {
+                  debugPrint('CachedNetworkImage error: $error');
+                  return SvgPicture.asset(
+                    "assets/svgs/profile_default.svg",
+                    width: 160.w,
+                    height: 160.h,
+                  );
+                },
+              ),
+            )
+          : SvgPicture.asset(
+              "assets/svgs/profile_default.svg",
+              width: 160.w,
+              height: 160.h,
+            ),
+    );
   }
 }
