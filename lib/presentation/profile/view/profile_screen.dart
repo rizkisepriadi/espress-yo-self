@@ -114,14 +114,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
   Widget _buildProfileAvatar(String? photoUrl, ColorScheme colorScheme) {
     return CircleAvatar(
-      radius: 60.r,
+      radius: 70.r,
       backgroundColor: Colors.grey.shade100,
       child: photoUrl != null && photoUrl.isNotEmpty
           ? ClipOval(
               child: CachedNetworkImage(
                 imageUrl: photoUrl,
-                width: 116.w,
-                height: 116.h,
+                width: 160.w,
+                height: 160.h,
                 fit: BoxFit.cover,
                 placeholder: (context, url) => Center(
                   child: SizedBox(
