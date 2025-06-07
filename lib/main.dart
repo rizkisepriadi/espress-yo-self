@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'constants/themes/theme.dart';
 
 void main() async {
@@ -14,12 +13,6 @@ void main() async {
   if (Firebase.apps.isEmpty) {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
-    );
-
-    await Supabase.initialize(
-      url: 'https://wdbuxjfehqcrnydksdjs.supabase.co',
-      anonKey:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkYnV4amZlaHFjcm55ZGtzZGpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgzMTE4MzksImV4cCI6MjA2Mzg4NzgzOX0.ctPG2ZTCceOdxhpcR_l0uSm1M2LWtBw-8o79K2Ah_P8',
     );
   }
 
@@ -83,7 +76,7 @@ class CustomErrorWidget extends StatelessWidget {
     );
   }
 }
-
+  
 final ThemeData _appTheme = ThemeData(
   useMaterial3: true,
   colorScheme: colorSchemeLight,
