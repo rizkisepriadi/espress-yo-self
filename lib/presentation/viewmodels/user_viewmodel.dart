@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:espress_yo_self/domain/entities/user_entity.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:espress_yo_self/domain/usecases/get_user_usecase.dart';
 
@@ -48,22 +51,22 @@ class UserViewModel extends StateNotifier<AsyncValue<UserEntity>> {
     }
   }
 
-  Future<void> updateUserProfile(String userId, String displayName) async {
+  Future<void> updateUserProfile(String userId, String displayName, {File? profileImage}) async {
     if (!mounted) return;
 
     state = const AsyncValue.loading();
     try {
-      await updateUserProfileUsecase.call(userId, displayName);
+      await updateUserProfileUsecase.call(userId, displayName, profileImage: profileImage);
 
       if (!mounted) return;
       try {
         await fetchUser();
-        print("User profile updated in Firestore");
+        debugPrint("User profile updated in Firestore");
       } catch (e) {
-        print("Profile updated but couldn't fetch updated user: $e");
+        debugPrint("Profile updated but couldn't fetch updated user: $e");
       }
     } catch (e, stack) {
-      print("Error updating user profile: $e");
+      debugPrint("Error updating user profile: $e");
 
       if (!mounted) return;
 
