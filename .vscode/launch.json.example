@@ -12,6 +12,8 @@
                 "--dart-define=FIREBASE_MESSAGING_SENDER_ID=your-real-sender-id",
                 "--dart-define=FIREBASE_PROJECT_ID=your-real-project-id",
                 "--dart-define=FIREBASE_STORAGE_BUCKET=your-real-storage-bucket"
+                "--dart-define=SUPABASE_ANON_KEY=your-real-anon-key"
+                "--dart-define=SUPABASE_URL=your-real-url"
             ],
             "console": "debugConsole",
         },
@@ -26,6 +28,8 @@
                 "--dart-define=FIREBASE_MESSAGING_SENDER_ID=your-real-sender-id",
                 "--dart-define=FIREBASE_PROJECT_ID=your-real-project-id",
                 "--dart-define=FIREBASE_STORAGE_BUCKET=your-real-storage-bucket"
+                "--dart-define=SUPABASE_ANON_KEY=your-real-anon-key"
+                "--dart-define=SUPABASE_URL=your-real-url"
             ],
         },
         {
@@ -39,6 +43,8 @@
                 "--dart-define=FIREBASE_MESSAGING_SENDER_ID=your-real-sender-id",
                 "--dart-define=FIREBASE_PROJECT_ID=your-real-project-id",
                 "--dart-define=FIREBASE_STORAGE_BUCKET=your-real-storage-bucket"
+                "--dart-define=SUPABASE_ANON_KEY=your-real-anon-key"
+                "--dart-define=SUPABASE_URL=your-real-url"
             ],
         }
     ]
