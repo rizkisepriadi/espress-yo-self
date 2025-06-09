@@ -1,4 +1,5 @@
 import 'package:espress_yo_self/constants/themes/color_app.dart';
+import 'package:espress_yo_self/encrypted/env.dart';
 import 'package:espress_yo_self/firebase_options.dart';
 import 'package:espress_yo_self/routes/app_routes.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'constants/themes/theme.dart';
 
 void main() async {
@@ -13,6 +15,11 @@ void main() async {
   if (Firebase.apps.isEmpty) {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
+    );
+
+    await Supabase.initialize(
+      url: Env.supabaseUrl,
+      anonKey: Env.supabaseAnonKey,
     );
   }
 
@@ -76,7 +83,7 @@ class CustomErrorWidget extends StatelessWidget {
     );
   }
 }
-  
+
 final ThemeData _appTheme = ThemeData(
   useMaterial3: true,
   colorScheme: colorSchemeLight,
