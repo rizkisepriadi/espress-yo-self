@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:espress_yo_self/domain/entities/reward_entity.dart';
+import 'package:espress_yo_self/domain/usecases/get_reward_usecase.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -26,6 +27,8 @@ import 'package:espress_yo_self/domain/entities/user_redemption_entity.dart';
 
 // ViewModels (only for auth)
 import 'package:espress_yo_self/presentation/viewmodels/auth_viewmodel.dart';
+
+import '../presentation/viewmodels/reward_viewmodel.dart';
 
 // ==================== CORE SERVICES ====================
 
@@ -91,6 +94,29 @@ final userRewardsProvider =
   final user = await ref.watch(currentUserProvider.future);
   final repository = ref.watch(rewardRepositoryProvider);
   return await repository.getUserRedemptions(user.id);
+});
+
+// Reward detail view model
+final rewardDetailViewModelProvider =
+    StateNotifierProvider<RewardViewmodel, AsyncValue<List<dynamic>>>((ref) {
+  return RewardViewmodel(
+    getAllRewardsUsecase:
+        GetAllRewardsUsecase(ref.watch(rewardRepositoryProvider)),
+    getActiveRewardsUsecase:
+        GetActiveRewardsUsecase(ref.watch(rewardRepositoryProvider)),
+    getRewardByIdUsecase:
+        GetRewardByIdUsecase(ref.watch(rewardRepositoryProvider)),
+    redeemRewardUsecase:
+        RedeemRewardUsecase(ref.watch(rewardRepositoryProvider)),
+    getUserRedemptionsUsecase:
+        GetUserRedemptionsUsecase(ref.watch(rewardRepositoryProvider)),
+    hasUserRedeemedRewardUsecase:
+        HasUserRedeemedRewardUsecase(ref.watch(rewardRepositoryProvider)),
+    getRewardRedemptionByIdUsecase:
+        GetRewardRedemptionByIdUsecase(ref.watch(rewardRepositoryProvider)),
+    markRedemptionAsUsedUsecase:
+        MarkRedemptionAsUsedUsecase(ref.watch(rewardRepositoryProvider)),
+  );
 });
 
 // User stamp progress
