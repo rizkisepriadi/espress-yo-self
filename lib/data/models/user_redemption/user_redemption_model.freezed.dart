@@ -36,6 +36,10 @@ mixin _$UserRedemptionModel {
   DateTime? get usedAt;
   @JsonKey(name: 'used_by_staff')
   String? get usedByStaff;
+  @JsonKey(name: 'expiry_date')
+  DateTime? get expiryDate;
+  @JsonKey(name: 'image_url')
+  String? get imageUrl;
 
   /// Create a copy of UserRedemptionModel
   /// with the given fields replaced by the non-null parameter values.
@@ -69,7 +73,11 @@ mixin _$UserRedemptionModel {
             (identical(other.qrCode, qrCode) || other.qrCode == qrCode) &&
             (identical(other.usedAt, usedAt) || other.usedAt == usedAt) &&
             (identical(other.usedByStaff, usedByStaff) ||
-                other.usedByStaff == usedByStaff));
+                other.usedByStaff == usedByStaff) &&
+            (identical(other.expiryDate, expiryDate) ||
+                other.expiryDate == expiryDate) &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -86,11 +94,13 @@ mixin _$UserRedemptionModel {
       isUsed,
       qrCode,
       usedAt,
-      usedByStaff);
+      usedByStaff,
+      expiryDate,
+      imageUrl);
 
   @override
   String toString() {
-    return 'UserRedemptionModel(id: $id, userId: $userId, rewardId: $rewardId, rewardName: $rewardName, rewardDescription: $rewardDescription, pointsUsed: $pointsUsed, redeemedAt: $redeemedAt, isUsed: $isUsed, qrCode: $qrCode, usedAt: $usedAt, usedByStaff: $usedByStaff)';
+    return 'UserRedemptionModel(id: $id, userId: $userId, rewardId: $rewardId, rewardName: $rewardName, rewardDescription: $rewardDescription, pointsUsed: $pointsUsed, redeemedAt: $redeemedAt, isUsed: $isUsed, qrCode: $qrCode, usedAt: $usedAt, usedByStaff: $usedByStaff, expiryDate: $expiryDate, imageUrl: $imageUrl)';
   }
 }
 
@@ -111,7 +121,9 @@ abstract mixin class $UserRedemptionModelCopyWith<$Res> {
       @JsonKey(name: 'is_used') bool isUsed,
       @JsonKey(name: 'qr_code') String? qrCode,
       @JsonKey(name: 'used_at') DateTime? usedAt,
-      @JsonKey(name: 'used_by_staff') String? usedByStaff});
+      @JsonKey(name: 'used_by_staff') String? usedByStaff,
+      @JsonKey(name: 'expiry_date') DateTime? expiryDate,
+      @JsonKey(name: 'image_url') String? imageUrl});
 }
 
 /// @nodoc
@@ -138,6 +150,8 @@ class _$UserRedemptionModelCopyWithImpl<$Res>
     Object? qrCode = freezed,
     Object? usedAt = freezed,
     Object? usedByStaff = freezed,
+    Object? expiryDate = freezed,
+    Object? imageUrl = freezed,
   }) {
     return _then(_self.copyWith(
       id: null == id
@@ -184,6 +198,14 @@ class _$UserRedemptionModelCopyWithImpl<$Res>
           ? _self.usedByStaff
           : usedByStaff // ignore: cast_nullable_to_non_nullable
               as String?,
+      expiryDate: freezed == expiryDate
+          ? _self.expiryDate
+          : expiryDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      imageUrl: freezed == imageUrl
+          ? _self.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -202,7 +224,9 @@ class _UserRedemptionModel implements UserRedemptionModel {
       @JsonKey(name: 'is_used') this.isUsed = false,
       @JsonKey(name: 'qr_code') this.qrCode,
       @JsonKey(name: 'used_at') this.usedAt,
-      @JsonKey(name: 'used_by_staff') this.usedByStaff});
+      @JsonKey(name: 'used_by_staff') this.usedByStaff,
+      @JsonKey(name: 'expiry_date') this.expiryDate,
+      @JsonKey(name: 'image_url') this.imageUrl});
   factory _UserRedemptionModel.fromJson(Map<String, dynamic> json) =>
       _$UserRedemptionModelFromJson(json);
 
@@ -238,6 +262,12 @@ class _UserRedemptionModel implements UserRedemptionModel {
   @override
   @JsonKey(name: 'used_by_staff')
   final String? usedByStaff;
+  @override
+  @JsonKey(name: 'expiry_date')
+  final DateTime? expiryDate;
+  @override
+  @JsonKey(name: 'image_url')
+  final String? imageUrl;
 
   /// Create a copy of UserRedemptionModel
   /// with the given fields replaced by the non-null parameter values.
@@ -276,7 +306,11 @@ class _UserRedemptionModel implements UserRedemptionModel {
             (identical(other.qrCode, qrCode) || other.qrCode == qrCode) &&
             (identical(other.usedAt, usedAt) || other.usedAt == usedAt) &&
             (identical(other.usedByStaff, usedByStaff) ||
-                other.usedByStaff == usedByStaff));
+                other.usedByStaff == usedByStaff) &&
+            (identical(other.expiryDate, expiryDate) ||
+                other.expiryDate == expiryDate) &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -293,11 +327,13 @@ class _UserRedemptionModel implements UserRedemptionModel {
       isUsed,
       qrCode,
       usedAt,
-      usedByStaff);
+      usedByStaff,
+      expiryDate,
+      imageUrl);
 
   @override
   String toString() {
-    return 'UserRedemptionModel(id: $id, userId: $userId, rewardId: $rewardId, rewardName: $rewardName, rewardDescription: $rewardDescription, pointsUsed: $pointsUsed, redeemedAt: $redeemedAt, isUsed: $isUsed, qrCode: $qrCode, usedAt: $usedAt, usedByStaff: $usedByStaff)';
+    return 'UserRedemptionModel(id: $id, userId: $userId, rewardId: $rewardId, rewardName: $rewardName, rewardDescription: $rewardDescription, pointsUsed: $pointsUsed, redeemedAt: $redeemedAt, isUsed: $isUsed, qrCode: $qrCode, usedAt: $usedAt, usedByStaff: $usedByStaff, expiryDate: $expiryDate, imageUrl: $imageUrl)';
   }
 }
 
@@ -320,7 +356,9 @@ abstract mixin class _$UserRedemptionModelCopyWith<$Res>
       @JsonKey(name: 'is_used') bool isUsed,
       @JsonKey(name: 'qr_code') String? qrCode,
       @JsonKey(name: 'used_at') DateTime? usedAt,
-      @JsonKey(name: 'used_by_staff') String? usedByStaff});
+      @JsonKey(name: 'used_by_staff') String? usedByStaff,
+      @JsonKey(name: 'expiry_date') DateTime? expiryDate,
+      @JsonKey(name: 'image_url') String? imageUrl});
 }
 
 /// @nodoc
@@ -347,6 +385,8 @@ class __$UserRedemptionModelCopyWithImpl<$Res>
     Object? qrCode = freezed,
     Object? usedAt = freezed,
     Object? usedByStaff = freezed,
+    Object? expiryDate = freezed,
+    Object? imageUrl = freezed,
   }) {
     return _then(_UserRedemptionModel(
       id: null == id
@@ -392,6 +432,14 @@ class __$UserRedemptionModelCopyWithImpl<$Res>
       usedByStaff: freezed == usedByStaff
           ? _self.usedByStaff
           : usedByStaff // ignore: cast_nullable_to_non_nullable
+              as String?,
+      expiryDate: freezed == expiryDate
+          ? _self.expiryDate
+          : expiryDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      imageUrl: freezed == imageUrl
+          ? _self.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
               as String?,
     ));
   }

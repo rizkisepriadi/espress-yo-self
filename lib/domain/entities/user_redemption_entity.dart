@@ -9,7 +9,9 @@ class UserRedemptionEntity {
   final bool isUsed; 
   final String? qrCode;
   final DateTime? usedAt; 
-  final String? usedByStaff; 
+  final String? usedByStaff;
+  final DateTime? expiryDate;
+  final String? imageUrl;  
 
   const UserRedemptionEntity({
     required this.id,
@@ -23,5 +25,7 @@ class UserRedemptionEntity {
     this.qrCode,
     this.usedAt,
     this.usedByStaff,
+    this.expiryDate,
+    this.imageUrl,
   });
 }

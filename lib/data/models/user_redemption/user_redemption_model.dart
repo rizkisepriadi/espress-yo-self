@@ -18,6 +18,8 @@ abstract class UserRedemptionModel with _$UserRedemptionModel {
     @JsonKey(name: 'qr_code') String? qrCode,
     @JsonKey(name: 'used_at') DateTime? usedAt,
     @JsonKey(name: 'used_by_staff') String? usedByStaff,
+    @JsonKey(name: 'expiry_date') DateTime? expiryDate,
+    @JsonKey(name: 'image_url') String? imageUrl,
   }) = _UserRedemptionModel;
 
   factory UserRedemptionModel.fromJson(Map<String, dynamic> json) =>
@@ -35,6 +37,10 @@ extension UserRedemptionModelMapper on UserRedemptionModel {
         redeemedAt: redeemedAt,
         isUsed: isUsed,
         qrCode: qrCode,
+        usedAt: usedAt,
+        usedByStaff: usedByStaff,
+        expiryDate: expiryDate,
+        imageUrl: imageUrl,
       );
 
   static UserRedemptionModel fromEntity(UserRedemptionEntity entity) =>
@@ -48,5 +54,9 @@ extension UserRedemptionModelMapper on UserRedemptionModel {
         redeemedAt: entity.redeemedAt,
         isUsed: entity.isUsed,
         qrCode: entity.qrCode,
+        usedAt: entity.usedAt,
+        usedByStaff: entity.usedByStaff,
+        expiryDate: entity.expiryDate,
+        imageUrl: entity.imageUrl,
       );
 }

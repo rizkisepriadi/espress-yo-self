@@ -21,6 +21,10 @@ _UserRedemptionModel _$UserRedemptionModelFromJson(Map<String, dynamic> json) =>
           ? null
           : DateTime.parse(json['used_at'] as String),
       usedByStaff: json['used_by_staff'] as String?,
+      expiryDate: json['expiry_date'] == null
+          ? null
+          : DateTime.parse(json['expiry_date'] as String),
+      imageUrl: json['image_url'] as String?,
     );
 
 Map<String, dynamic> _$UserRedemptionModelToJson(
@@ -37,4 +41,6 @@ Map<String, dynamic> _$UserRedemptionModelToJson(
       'qr_code': instance.qrCode,
       'used_at': instance.usedAt?.toIso8601String(),
       'used_by_staff': instance.usedByStaff,
+      'expiry_date': instance.expiryDate?.toIso8601String(),
+      'image_url': instance.imageUrl,
     };
