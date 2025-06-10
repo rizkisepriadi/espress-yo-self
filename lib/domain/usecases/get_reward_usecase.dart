@@ -42,6 +42,15 @@ class GetUserRedemptionsUsecase {
   }
 }
 
+class GetRewardRedemptionByIdUsecase {
+  final RewardRepository repository;
+  GetRewardRedemptionByIdUsecase(this.repository);
+
+  Future<UserRedemptionEntity?> call(String redemptionId) async {
+    return await repository.getRewardRedemptionById(redemptionId);
+  }
+}
+
 class HasUserRedeemedRewardUsecase {
   final RewardRepository repository;
   HasUserRedeemedRewardUsecase(this.repository);
