@@ -5,6 +5,7 @@ import 'package:espress_yo_self/presentation/rewards/widgets/points_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
 class RewardsScreen extends ConsumerStatefulWidget {
   const RewardsScreen({super.key});
@@ -110,7 +111,9 @@ class _RewardsScreenState extends ConsumerState<RewardsScreen> {
                     child: CouponCard(
                       title: rewardData.rewardName,
                       description: rewardData.rewardDescription,
-                      onPressed: () {},
+                      onPressed: () {
+                        context.push('/reward-detail/${rewardData.id}');
+                      },
                     ),
                   );
                 } else {
