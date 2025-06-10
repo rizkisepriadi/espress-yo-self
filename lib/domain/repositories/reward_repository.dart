@@ -7,6 +7,7 @@ abstract class RewardRepository {
   Future<RewardEntity?> getRewardById(String rewardId);
   Future<void> redeemReward(String userId, String rewardId, int pointsRequired);
   Future<List<UserRedemptionEntity>> getUserRedemptions(String userId);
+  Future<UserRedemptionEntity?> getRewardRedemptionById(String rewardId);
   Future<bool> hasUserRedeemedReward(String userId, String rewardId);
   Future<void> markRedemptionAsUsed(String redemptionId, String staffId);
 }

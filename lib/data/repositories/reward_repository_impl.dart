@@ -60,6 +60,22 @@ class RewardRepositoryImpl implements RewardRepository {
   }
 
   @override
+  Future<UserRedemptionEntity?> getRewardRedemptionById(
+      String redemptionId) async {
+    return await safeCall(() async {
+      final doc = await _redemptionsCollection.doc(redemptionId).get();
+
+      if (!doc.exists) return null;
+
+      final model = UserRedemptionModel.fromJson({
+        'id': doc.id,
+        ...doc.data()! as Map<String, dynamic>,
+      });
+      return model.toEntity();
+    }, label: 'getRewardRedemptionById');
+  }
+
+  @override
   Future<void> redeemReward(
       String userId, String rewardId, int pointsRequired) async {
     return await safeCall(() async {
@@ -108,6 +124,10 @@ class RewardRepositoryImpl implements RewardRepository {
           redeemedAt: DateTime.now(),
           isUsed: false,
           qrCode: 'QR_${redemptionId}',
+          usedAt: null,
+          usedByStaff: null,
+          expiryDate: DateTime.now().add(const Duration(days: 7)),
+          imageUrl: rewardData['image_url'] ?? '',
         );
 
         transaction.set(
