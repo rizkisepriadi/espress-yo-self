@@ -2,6 +2,7 @@ import 'package:espress_yo_self/di/di.dart';
 import 'package:espress_yo_self/presentation/history/view/history_screen.dart';
 import 'package:espress_yo_self/presentation/profile/view/edit_profile_screen.dart';
 import 'package:espress_yo_self/presentation/profile/view/profile_screen.dart';
+import 'package:espress_yo_self/presentation/rewards/view/reward_detail_screen.dart';
 import 'package:espress_yo_self/presentation/rewards/view/rewards_screen.dart';
 import 'package:espress_yo_self/presentation/main/main_shell_screen.dart';
 import 'package:flutter/material.dart';
@@ -73,6 +74,18 @@ final routerProvider = Provider<GoRouter>((ref) {
         ),
         name: 'EditProfile',
       ),
+
+      GoRoute(
+        path: '/reward-detail/:rewardId',
+        pageBuilder: (context, state) {
+          final rewardId = state.pathParameters['rewardId']!;
+          return MaterialPage(
+            child: RewardDetailScreen(rewardId: rewardId),
+          );
+        },
+        name: 'RewardDetail',
+      ),
+
       ShellRoute(
         builder: (context, state, child) => MainShellScreen(child: child),
         routes: [
