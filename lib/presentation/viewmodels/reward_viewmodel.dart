@@ -7,6 +7,7 @@ class RewardViewmodel extends StateNotifier<AsyncValue<List<dynamic>>> {
   final GetRewardByIdUsecase getRewardByIdUsecase;
   final RedeemRewardUsecase redeemRewardUsecase;
   final GetUserRedemptionsUsecase getUserRedemptionsUsecase;
+  final GetRewardRedemptionByIdUsecase getRewardRedemptionByIdUsecase;
   final HasUserRedeemedRewardUsecase hasUserRedeemedRewardUsecase;
   final MarkRedemptionAsUsedUsecase markRedemptionAsUsedUsecase;
 
@@ -18,6 +19,7 @@ class RewardViewmodel extends StateNotifier<AsyncValue<List<dynamic>>> {
     required this.getUserRedemptionsUsecase,
     required this.hasUserRedeemedRewardUsecase,
     required this.markRedemptionAsUsedUsecase,
+    required this.getRewardRedemptionByIdUsecase,
   }) : super(const AsyncValue.loading()) {
     fetchAllRewards();
   }
@@ -43,14 +45,39 @@ class RewardViewmodel extends StateNotifier<AsyncValue<List<dynamic>>> {
   }
 
   Future<void> fetchRewardById(String rewardId) async {
+    print('DEBUG: fetchRewardById called with ID: $rewardId'); // Debug log
     try {
+      state = const AsyncValue.loading();
       final reward = await getRewardByIdUsecase.call(rewardId);
+      print('DEBUG: Reward fetched: $reward'); // Debug log
+
       if (reward != null) {
         state = AsyncValue.data([reward]);
       } else {
+        print('DEBUG: Reward is null'); // Debug log
         state = const AsyncValue.data([]);
       }
     } catch (e, stack) {
+      print('DEBUG: Error in fetchRewardById: $e'); // Debug log
+      state = AsyncValue.error(e, stack);
+    }
+  }
+  
+  Future<void> fetchRewardRedemptionById(String rewardId) async {
+    print('DEBUG: fetchRewardById called with ID: $rewardId'); // Debug log
+    try {
+      state = const AsyncValue.loading();
+      final reward = await getRewardRedemptionByIdUsecase.call(rewardId);
+      print('DEBUG: Reward fetched: $reward'); // Debug log
+
+      if (reward != null) {
+        state = AsyncValue.data([reward]);
+      } else {
+        print('DEBUG: Reward is null'); // Debug log
+        state = const AsyncValue.data([]);
+      }
+    } catch (e, stack) {
+      print('DEBUG: Error in fetchRewardById: $e'); // Debug log
       state = AsyncValue.error(e, stack);
     }
   }
