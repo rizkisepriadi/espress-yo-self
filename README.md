@@ -248,9 +248,9 @@ The app implements secure Firestore rules to protect user data and ensure proper
 
 | Architecture            | Download Link                                                                                     | Size   |
 | ----------------------- | ------------------------------------------------------------------------------------------------- | ------ |
-| **ARM64 (arm64-v8a)**   | [Download APK](https://github.com/your-repo/releases/download/v1.0.0/app-arm64-v8a-release.apk)   | ~45 MB |
-| **ARM32 (armeabi-v7a)** | [Download APK](https://github.com/your-repo/releases/download/v1.0.0/app-armeabi-v7a-release.apk) | ~42 MB |
-| **x86_64**              | [Download APK](https://github.com/your-repo/releases/download/v1.0.0/app-x86_64-release.apk)      | ~48 MB |
+| **ARM64 (arm64-v8a)**   | [Download APK]([https://github.com/your-repo/releases/download/v1.0.0/app-arm64-v8a-release.apk](https://github.com/rizkisepriadi/espress-yo-self/releases/download/v1.0.0/app-arm64-v8a.apk))   | ~27 MB |
+| **ARM32 (armeabi-v7a)** | [Download APK]([https://github.com/your-repo/releases/download/v1.0.0/app-armeabi-v7a-release.apk](https://github.com/rizkisepriadi/espress-yo-self/releases/download/v1.0.0/express_yo_self-armeabi-v7a.apk)) | ~23 MB |
+| **x86_64**              | [Download APK]([https://github.com/your-repo/releases/download/v1.0.0/app-x86_64-release.apk](https://github.com/rizkisepriadi/espress-yo-self/releases/download/v1.0.0/express_yo_self-x86_64.apk))      | ~29 MB |
 
 **Recommended**: Download ARM64 version for most modern Android devices (2019+)
 
@@ -298,10 +298,6 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 📞 Support
-
-For support, email support@espressyoself.com or join our [Discord community](https://discord.gg/espressyoself).
 
 ## 🙏 Acknowledgments
 
